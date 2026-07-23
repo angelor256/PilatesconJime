@@ -3,463 +3,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Gallery - Experimental Grid</title>
+    <title>STUDIO ARCHIVE — Editorial & Direction</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0d0d0d;
-            --accent-red: #ff1e27;
-            --text-main: #f0f0f0;
-            --text-muted: #888888;
-            --card-bg: #161616;
-            --grid-gap: 4px;
+            --bg-dark: #080808;
+            --text-light: #e5e5e5;
+            --text-muted: #666666;
+            --accent-warm: #d4a373;
+            --accent-red: #8b0000;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            user-select: none;
-            -webkit-user-select: none;
+            box-sizing: border-box;
+            cursor: none; /* Custom cursor */
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
             font-family: 'Space Grotesk', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             overflow-x: hidden;
+            selection-background-color: var(--accent-red);
         }
 
-        /* Phone Frame Container */
-        .app-container {
-            width: 100%;
-            max-width: 420px;
+        /* Custom Magnetic Cursor */
+        #cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--text-light);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+            mix-blend-mode: difference;
+        }
+
+        #cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.25s ease-out;
+        }
+
+        body.hovered #cursor {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Film Grain Overlay */
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
             height: 100vh;
-            max-height: 880px;
-            background-color: #000000;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #222;
+            pointer-events: none;
+            z-index: 900;
+            opacity: 0.05;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Film_Grain.png');
         }
 
-        /* Header Bar */
+        /* Header / Navigation */
         header {
-            padding: 18px 20px 14px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: rgba(13, 13, 13, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 10;
-            border-bottom: 1px solid #1a1a1a;
+            z-index: 100;
+            mix-blend-mode: difference;
         }
 
-        .brand-title {
-            font-size: 1.1rem;
-            font-weight: 700;
+        .brand-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.85rem;
             letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-left: 40px;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 0.5;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 0 60px;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(3rem, 8vw, 9rem);
+            font-weight: 400;
+            text-align: center;
+            line-height: 0.95;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            color: var(--text-muted);
             text-transform: uppercase;
         }
 
-        .header-actions {
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Editorial Portfolio Grid Section */
+        .portfolio-section {
+            padding: 100px 60px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 80px;
             display: flex;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 1px solid #222;
+            padding-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+        }
+
+        /* Asymmetric Editorial Gallery */
+        .editorial-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 40px;
             align-items: center;
         }
 
-        .badge-live {
-            font-size: 0.65rem;
-            background: var(--accent-red);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 2px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-
-        /* Main Scroll Area */
-        main {
-            flex: 1;
-            overflow-y: auto;
-            scrollbar-width: none;
+        .work-item {
             position: relative;
-        }
-        main::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Grid Layout */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--grid-gap);
-            padding: var(--grid-gap);
-            background-color: #000;
-        }
-
-        .grid-item {
-            position: relative;
-            aspect-ratio: 9 / 16;
             overflow: hidden;
-            background-color: var(--card-bg);
-            cursor: pointer;
-            transition: transform 0.2s ease;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .grid-item.featured {
-            grid-column: span 1;
-            aspect-ratio: 9 / 16;
-        }
-
-        .grid-item img, .grid-item video {
+        .work-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-            filter: contrast(1.05) brightness(0.95);
-            transition: filter 0.3s ease, transform 0.4s ease;
+            filter: grayscale(30%) contrast(110%);
+            transition: filter 0.5s ease, transform 0.7s ease;
         }
 
-        .grid-item:hover img {
-            filter: contrast(1.15) brightness(1.05);
-            transform: scale(1.03);
+        .work-item:hover img {
+            filter: grayscale(0%) contrast(100%);
+            transform: scale(1.05);
         }
 
-        /* Badges / Icons on Overlay */
-        .item-icon {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            z-index: 2;
-            color: rgba(255, 255, 255, 0.9);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
-            pointer-events: none;
-        }
-
-        .item-icon svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-
-        /* Glitch Effect Overlay on Click */
-        .glitch-flash {
-            position: absolute;
-            inset: 0;
-            background: red;
-            mix-blend-mode: color-dodge;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .grid-item.glitching .glitch-flash {
-            animation: glitch-anim 0.35s steps(2, start);
-        }
-
-        @keyframes glitch-anim {
-            0% { opacity: 0.8; transform: translate(2px, -2px) scale(1.02); filter: hue-rotate(90deg); }
-            25% { opacity: 0.3; transform: translate(-2px, 2px); filter: hue-rotate(180deg); }
-            50% { opacity: 0.9; transform: translate(1px, 1px); filter: hue-rotate(270deg); }
-            75% { opacity: 0.2; transform: translate(-1px, -1px); }
-            100% { opacity: 0; transform: translate(0, 0); }
-        }
-
-        /* Lightbox Modal */
-        .modal {
-            position: absolute;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(15px);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-header {
-            padding: 16px 20px;
+        .work-info {
+            margin-top: 15px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            text-transform: uppercase;
         }
 
-        .modal-close {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 4px;
+        .work-title {
+            color: var(--text-light);
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
         }
 
-        .modal-body {
-            flex: 1;
+        /* Asymmetric Column Spans for Avant-Garde Feel */
+        .item-1 { grid-column: span 7; aspect-ratio: 16 / 10; }
+        .item-2 { grid-column: span 5; aspect-ratio: 4 / 5; transform: translateY(60px); }
+        .item-3 { grid-column: span 4; aspect-ratio: 3 / 4; margin-top: 80px; }
+        .item-4 { grid-column: span 8; aspect-ratio: 16 / 9; margin-top: 40px; }
+
+        /* Rotated Surreal Photo Container (Inspired by photo reference) */
+        .surreal-frame {
+            transform: rotate(-90deg) scale(0.9);
+            transition: transform 0.6s ease;
+        }
+        .work-item:hover .surreal-frame {
+            transform: rotate(0deg) scale(1);
+        }
+
+        /* Footer Statement */
+        footer {
+            padding: 120px 60px 60px 60px;
+            text-align: center;
+            border-top: 1px solid #151515;
+            margin-top: 100px;
+        }
+
+        .footer-quote {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            line-height: 1.3;
+            color: #888;
+        }
+
+        .footer-links {
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .modal-body img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .modal-footer {
-            padding: 20px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.9));
-        }
-
-        .modal-meta-title {
-            font-size: 0.9rem;
-            font-weight: 700;
-            letter-spacing: 1px;
+            gap: 30px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
             text-transform: uppercase;
-        }
-
-        .modal-meta-sub {
-            font-size: 0.75rem;
             color: var(--text-muted);
-            margin-top: 4px;
         }
 
-        /* Tab Bar Navigation */
-        nav.tab-bar {
-            height: 60px;
-            background-color: #090909;
-            border-top: 1px solid #1a1a1a;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .tab-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: color 0.2s;
-            cursor: pointer;
-        }
-
-        .tab-item.active {
-            color: var(--accent-red);
-        }
-
-        .tab-item svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-
-        /* Grain / CRT Scanline Overlay */
-        .crt-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 3px, 6px 100%;
-            pointer-events: none;
-            z-index: 20;
-            opacity: 0.6;
+        @media (max-width: 900px) {
+            header, .portfolio-section, footer { padding: 30px 20px; }
+            .editorial-grid { grid-template-columns: 1fr; gap: 60px; }
+            .item-1, .item-2, .item-3, .item-4 { grid-column: span 1; transform: none !important; margin-top: 0 !important; }
         }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <!-- CRT Screen Texture for Aesthetic -->
-        <div class="crt-overlay"></div>
+    <div id="cursor"></div>
+    <div id="cursor-follower"></div>
+    <div class="grain-overlay"></div>
 
-        <!-- Top Header Bar -->
-        <header>
-            <div class="brand-title">NICHOLAS J.</div>
-            <div class="header-actions">
-                <span class="badge-live">ARCHIVE</span>
-            </div>
-        </header>
-
-        <!-- Main Scrollable Grid Content -->
-        <main>
-            <div class="grid-container">
-                
-                <!-- Item 1: CDMX B&W Style -->
-                <div class="grid-item" onclick="openModal(this, 'CDMX CONCERT TOUR', '35mm Monochrome / Live Shot')">
-                    <div class="item-icon">
-                        <!-- Pin Icon -->
-                        <svg viewBox="0 0 24 24"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>
-                    </div>
-                    <div class="glitch-flash"></div>
-                    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600&auto=format&fit=crop" alt="B&W Concert">
-                </div>
-
-                <!-- Item 2: Close Red Eye Portrait -->
-                <div class="grid-item" onclick="openModal(this, 'RED SHADOWS', 'Gel Lighting / Editorial')">
-                    <div class="item-icon">
-                        <!-- Pin Icon -->
-                        <svg viewBox="0 0 24 24"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>
-                    </div>
-                    <div class="glitch-flash"></div>
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop" style="filter: sepia(1) hue-rotate(300deg) saturate(4) contrast(1.2);" alt="Red Portrait">
-                </div>
-
-                <!-- Item 3: Tunnel Flash Shot -->
-                <div class="grid-item" onclick="openModal(this, 'UNDERPASS', 'Night Flash / Streetware')">
-                    <div class="item-icon">
-                        <!-- Pin Icon -->
-                        <svg viewBox="0 0 24 24"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>
-                    </div>
-                    <div class="glitch-flash"></div>
-                    <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=600&auto=format&fit=crop" alt="Night Tunnel">
-                </div>
-
-                <!-- Item 4: Flash Portrait Hoodie -->
-                <div class="grid-item" onclick="openModal(this, 'RAW STUDIO V1', 'Flash Direct / Beanie')">
-                    <div class="item-icon">
-                        <!-- Multiple Photos Icon -->
-                        <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
-                    </div>
-                    <div class="glitch-flash"></div>
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=600&auto=format&fit=crop" alt="Portrait Beanie">
-                </div>
-
-                <!-- Item 5: Angle Room Shot -->
-                <div class="grid-item" onclick="openModal(this, 'DISTORTION ROOM', 'Wide Angle Lens 12mm')">
-                    <div class="item-icon">
-                        <!-- Multiple Photos Icon -->
-                        <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
-                    </div>
-                    <div class="glitch-flash"></div>
-                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600&auto=format&fit=crop" alt="Low Angle">
-                </div>
-
-                <!-- Item 6: Video Stage Blue -->
-                <div class="grid-item" onclick="openModal(this, 'STAGING NIGHT', '4K Video / Live Set')">
-                    <div class="item-icon">
-                        <!-- Video Play Icon -->
-                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-                    </div>
-                    <div class="glitch-flash"></div>
-                    <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=600&auto=format&fit=crop" alt="Stage Lights">
-                </div>
-
-                <!-- Item 7: Extra Underground -->
-                <div class="grid-item" onclick="openModal(this, 'NEON STREETS', 'Analog Film')">
-                    <div class="glitch-flash"></div>
-                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=600&auto=format&fit=crop" alt="Music Vibe">
-                </div>
-
-                <!-- Item 8: Extra Dark Vibe -->
-                <div class="grid-item" onclick="openModal(this, 'GRAIN & SMOKE', '35mm Film')">
-                    <div class="glitch-flash"></div>
-                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=600&auto=format&fit=crop" alt="Event Smoke">
-                </div>
-
-                <!-- Item 9: Extra Flash -->
-                <div class="grid-item" onclick="openModal(this, 'BACKSTAGE', 'Raw Unfiltered')">
-                    <div class="glitch-flash"></div>
-                    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=600&auto=format&fit=crop" alt="Backstage Pass">
-                </div>
-
-            </div>
-        </main>
-
-        <!-- Lightbox / Glitch Modal -->
-        <div class="modal" id="photoModal">
-            <div class="modal-header">
-                <span style="font-size:0.7rem; letter-spacing:1.5px; color:var(--accent-red)">PREVIEW_MODE</span>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <img id="modalImg" src="" alt="Expanded View">
-            </div>
-            <div class="modal-footer">
-                <div class="modal-meta-title" id="modalTitle">TITLE</div>
-                <div class="modal-meta-sub" id="modalSub">DESCRIPTION</div>
-            </div>
-        </div>
-
-        <!-- Bottom Tab Bar -->
-        <nav class="tab-bar">
-            <div class="tab-item">
-                <svg viewBox="0 0 24 24"><path d="M4 11h5V5H4v6zm0 7h5v-5H4v5zm6 0h5v-5h-5v5zm6 0h5v-5h-5v5zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/></svg>
-                <span>Grid</span>
-            </div>
-            <div class="tab-item">
-                <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
-                <span>Journal</span>
-            </div>
-            <div class="tab-item active">
-                <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
-                <span>Gallery</span>
-            </div>
-            <div class="tab-item">
-                <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-                <span>Info</span>
-            </div>
+    <header>
+        <div class="brand-logo">AURELIO & CO.</div>
+        <nav>
+            <a href="#work" class="interactive">TRABAJOS</a>
+            <a href="#about" class="interactive">VISION</a>
+            <a href="#contact" class="interactive">CONTACTO</a>
         </nav>
-    </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title">CINEMATOGRAPHY<br>& FINE ART</h1>
+            <p class="hero-subtitle">DIRECTOR DE FOTOGRAFÍA & CINEASTA EXPERIMENTAL</p>
+            <div class="scroll-indicator">EXPLORAR ARCHIVO ↓</div>
+        </section>
+
+        <!-- Editorial Gallery -->
+        <section class="portfolio-section" id="work">
+            <div class="section-header">
+                <h2 class="section-title">SELECCIÓN EDITORIAL (2025–2026)</h2>
+                <span style="color: var(--text-muted); font-size:0.8rem;">[ 01 — 04 ]</span>
+            </div>
+
+            <div class="editorial-grid">
+                
+                <!-- Work 1 -->
+                <div class="work-item item-1 interactive">
+                    <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1200&auto=format&fit=crop" alt="Cine Shot">
+                    <div class="work-info">
+                        <span class="work-title">EL PASADIZO</span>
+                        <span>FILM / 35MM</span>
+                    </div>
+                </div>
+
+                <!-- Work 2: Surreal / Rotated Shot inspired by user image -->
+                <div class="work-item item-2 interactive">
+                    <div style="width:100%; height:100%; overflow:hidden;">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop" class="surreal-frame" alt="Rotated Editorial Shot">
+                    </div>
+                    <div class="work-info">
+                        <span class="work-title">PERSPECTIVA INVERTIDA</span>
+                        <span>MODA / EDITORIAL</span>
+                    </div>
+                </div>
+
+                <!-- Work 3 -->
+                <div class="work-item item-3 interactive">
+                    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop" alt="Live Concert">
+                    <div class="work-info">
+                        <span class="work-title">LUZ & SOMBRA</span>
+                        <span>DOCUMENTAL</span>
+                    </div>
+                </div>
+
+                <!-- Work 4 -->
+                <div class="work-item item-4 interactive">
+                    <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1400&auto=format&fit=crop" alt="Stage Cinematography">
+                    <div class="work-info">
+                        <span class="work-title">NOCTURNO</span>
+                        <span>VIDEO MUSICAL / DIRECTION</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p class="footer-quote">"EL CINE Y LA FOTOGRAFÍA NO SON UN REGISTRO DE LA REALIDAD, SON UNA ESCULTURA DEL TIEMPO."</p>
+        <div class="footer-links">
+            <a href="#" class="interactive">INSTAGRAM</a>
+            <a href="#" class="interactive">VIMEO</a>
+            <a href="#" class="interactive">READYMAG / ARCHIVE</a>
+        </div>
+    </footer>
 
     <script>
-        function openModal(element, title, sub) {
-            // Trigger Glitch animation
-            element.classList.add('glitching');
-            
-            const imgSrc = element.querySelector('img').src;
-            const modal = document.getElementById('photoModal');
-            const modalImg = document.getElementById('modalImg');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalSub = document.getElementById('modalSub');
+        // Custom Magnetic Mouse Track
+        const cursor = document.getElementById('cursor');
+        const follower = document.getElementById('cursor-follower');
+        const interactives = document.querySelectorAll('.interactive');
 
-            setTimeout(() => {
-                modalImg.src = imgSrc;
-                modalTitle.textContent = title;
-                modalSub.textContent = sub;
-                modal.classList.add('active');
-                element.classList.remove('glitching');
-            }, 250);
-        }
+        let mouseX = 0, mouseY = 0;
+        let followerX = 0, followerY = 0;
 
-        function closeModal() {
-            const modal = document.getElementById('photoModal');
-            modal.classList.remove('active');
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            cursor.style.left = `${mouseX}px`;
+            cursor.style.top = `${mouseY}px`;
+        });
+
+        function animateFollower() {
+            followerX += (mouseX - followerX) * 0.1;
+            followerY += (mouseY - followerY) * 0.1;
+
+            follower.style.left = `${followerX}px`;
+            follower.style.top = `${followerY}px`;
+
+            requestAnimationFrame(animateFollower);
         }
+        animateFollower();
+
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
+        });
     </script>
 </body>
 </html>
