@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STUDIO ARCHIVE — Editorial & Direction</title>
+    <title>AURELIO & CO. — Cinematography & Fine Art</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:ital,wght@0,400;0,600;0,800;1,400&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #080808;
-            --text-light: #e5e5e5;
-            --text-muted: #666666;
-            --accent-warm: #d4a373;
-            --accent-red: #8b0000;
+            --bg-dark: #070707;
+            --text-light: #f4f4f0;
+            --text-muted: #777777;
+            --accent-red: #a80f15;
+            --accent-gold: #c8a261;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none; /* Custom cursor */
+            cursor: none;
         }
 
         body {
@@ -28,61 +28,76 @@
             color: var(--text-light);
             font-family: 'Space Grotesk', sans-serif;
             overflow-x: hidden;
-            selection-background-color: var(--accent-red);
+            transition: filter 0.5s ease, background-color 0.5s ease;
         }
 
-        /* Custom Magnetic Cursor */
+        /* Inverted Lightbox Mode */
+        body.raw-mode {
+            filter: invert(100%) hue-rotate(180deg);
+            background-color: #fafafa;
+        }
+
+        /* Magnetic Custom Cursor */
         #cursor {
             position: fixed;
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             background: var(--text-light);
             border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
-            transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease;
             mix-blend-mode: difference;
         }
 
         #cursor-follower {
             position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(244, 244, 240, 0.4);
             border-radius: 50%;
             pointer-events: none;
             z-index: 9998;
             transform: translate(-50%, -50%);
-            transition: transform 0.25s ease-out;
+            transition: transform 0.18s ease-out, border-color 0.3s ease;
         }
 
         body.hovered #cursor {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.9);
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
         }
 
-        /* Film Grain Overlay */
+        body.hovered-video #cursor::after {
+            content: 'PLAY';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #000;
+        }
+
+        /* Dynamic Grain */
         .grain-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            inset: 0;
             pointer-events: none;
             z-index: 900;
-            opacity: 0.05;
+            opacity: 0.06;
             background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Film_Grain.png');
         }
 
-        /* Header / Navigation */
+        /* Navigation Header */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 40px 60px;
+            padding: 35px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -92,25 +107,44 @@
 
         .brand-logo {
             font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
-            letter-spacing: 4px;
+            font-size: 1.1rem;
+            letter-spacing: 5px;
             text-transform: uppercase;
             font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .raw-btn {
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-light);
+            padding: 6px 14px;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .raw-btn:hover {
+            background: var(--text-light);
+            color: var(--bg-dark);
         }
 
         nav a {
             color: var(--text-light);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-left: 40px;
             transition: opacity 0.3s;
         }
 
-        nav a:hover {
-            opacity: 0.5;
-        }
+        nav a:hover { opacity: 0.5; }
 
         /* Hero Section */
         .hero {
@@ -121,98 +155,168 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            padding: 0 60px;
+            padding: 0 50px;
         }
 
         .hero-title {
             font-family: 'Cinzel', serif;
-            font-size: clamp(3rem, 8vw, 9rem);
+            font-size: clamp(2.5rem, 7.5vw, 8.5rem);
             font-weight: 400;
             text-align: center;
-            line-height: 0.95;
+            line-height: 0.92;
             letter-spacing: -2px;
             text-transform: uppercase;
-            margin-bottom: 20px;
+        }
+
+        .hero-title i {
+            font-family: 'Cinzel', serif;
+            font-style: italic;
+            font-weight: 400;
+            color: var(--accent-gold);
         }
 
         .hero-subtitle {
-            font-size: 0.9rem;
-            letter-spacing: 4px;
+            margin-top: 25px;
+            font-size: 0.85rem;
+            letter-spacing: 5px;
             color: var(--text-muted);
             text-transform: uppercase;
         }
 
-        .scroll-indicator {
+        /* Showreel Video Banner */
+        .reel-section {
+            padding: 0 50px;
+            margin-bottom: 120px;
+        }
+
+        .reel-container {
+            width: 100%;
+            height: 70vh;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #1a1a1a;
+        }
+
+        .reel-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7) contrast(1.1);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reel-container:hover video {
+            transform: scale(1.03);
+        }
+
+        .reel-overlay-text {
             position: absolute;
-            bottom: 40px;
-            font-size: 0.75rem;
+            bottom: 30px;
+            left: 40px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
             letter-spacing: 3px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            animation: bounce 2s infinite;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
-        }
-
-        /* Editorial Portfolio Grid Section */
+        /* Asymmetric Editorial Gallery */
         .portfolio-section {
-            padding: 100px 60px;
+            padding: 40px 50px 100px 50px;
             max-width: 1600px;
             margin: 0 auto;
         }
 
         .section-header {
-            margin-bottom: 80px;
+            margin-bottom: 70px;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            border-bottom: 1px solid #222;
+            border-bottom: 1px solid #1a1a1a;
             padding-bottom: 20px;
         }
 
         .section-title {
             font-family: 'Cinzel', serif;
-            font-size: 2rem;
-            letter-spacing: 2px;
+            font-size: 1.8rem;
+            letter-spacing: 3px;
         }
 
-        /* Asymmetric Editorial Gallery */
         .editorial-grid {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
-            gap: 40px;
+            gap: 50px;
             align-items: center;
         }
 
+        /* Work Item Card */
         .work-item {
             position: relative;
             overflow: hidden;
-            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            background: #000;
         }
 
-        .work-item img {
+        .work-media {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .work-item img, .work-item video {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-            filter: grayscale(30%) contrast(110%);
-            transition: filter 0.5s ease, transform 0.7s ease;
+            filter: grayscale(20%) contrast(108%);
+            transition: filter 0.6s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .work-item video {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .work-item:hover video {
+            opacity: 1;
         }
 
         .work-item:hover img {
-            filter: grayscale(0%) contrast(100%);
-            transform: scale(1.05);
+            transform: scale(1.06);
+            filter: grayscale(0%);
+        }
+
+        /* Technical Data HUD Overlay */
+        .tech-specs {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.4s ease;
+            pointer-events: none;
+            background: rgba(0,0,0,0.6);
+            padding: 8px 12px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .work-item:hover .tech-specs {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .work-info {
-            margin-top: 15px;
+            margin-top: 18px;
             display: flex;
             justify-content: space-between;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
+            align-items: center;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
             color: var(--text-muted);
             text-transform: uppercase;
         }
@@ -223,24 +327,25 @@
             font-size: 1.1rem;
         }
 
-        /* Asymmetric Column Spans for Avant-Garde Feel */
+        /* Spans for Avant-Garde Grid Layout */
         .item-1 { grid-column: span 7; aspect-ratio: 16 / 10; }
-        .item-2 { grid-column: span 5; aspect-ratio: 4 / 5; transform: translateY(60px); }
-        .item-3 { grid-column: span 4; aspect-ratio: 3 / 4; margin-top: 80px; }
-        .item-4 { grid-column: span 8; aspect-ratio: 16 / 9; margin-top: 40px; }
+        .item-2 { grid-column: span 5; aspect-ratio: 4 / 5; transform: translateY(50px); }
+        .item-3 { grid-column: span 5; aspect-ratio: 3 / 4; margin-top: 60px; }
+        .item-4 { grid-column: span 7; aspect-ratio: 16 / 9; }
 
-        /* Rotated Surreal Photo Container (Inspired by photo reference) */
+        /* Surreal Rotated Framing Effect */
         .surreal-frame {
-            transform: rotate(-90deg) scale(0.9);
-            transition: transform 0.6s ease;
+            transform: rotate(-90deg) scale(0.92);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .work-item:hover .surreal-frame {
             transform: rotate(0deg) scale(1);
         }
 
         /* Footer Statement */
         footer {
-            padding: 120px 60px 60px 60px;
+            padding: 140px 50px 60px 50px;
             text-align: center;
             border-top: 1px solid #151515;
             margin-top: 100px;
@@ -248,25 +353,25 @@
 
         .footer-quote {
             font-family: 'Cinzel', serif;
-            font-size: 2.5rem;
-            max-width: 800px;
-            margin: 0 auto 40px auto;
-            line-height: 1.3;
-            color: #888;
+            font-size: clamp(1.8rem, 4vw, 3.2rem);
+            max-width: 900px;
+            margin: 0 auto 50px auto;
+            line-height: 1.25;
+            color: #999;
         }
 
         .footer-links {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 40px;
             font-size: 0.8rem;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--text-muted);
         }
 
         @media (max-width: 900px) {
-            header, .portfolio-section, footer { padding: 30px 20px; }
+            header, .portfolio-section, .reel-section, footer { padding: 25px; }
             .editorial-grid { grid-template-columns: 1fr; gap: 60px; }
             .item-1, .item-2, .item-3, .item-4 { grid-column: span 1; transform: none !important; margin-top: 0 !important; }
         }
@@ -280,42 +385,56 @@
 
     <header>
         <div class="brand-logo">AURELIO & CO.</div>
-        <nav>
-            <a href="#work" class="interactive">TRABAJOS</a>
-            <a href="#about" class="interactive">VISION</a>
-            <a href="#contact" class="interactive">CONTACTO</a>
-        </nav>
+        <div class="nav-right">
+            <button class="raw-btn interactive" onclick="toggleRawMode()">[ RAW LIGHTBOX ]</button>
+            <nav>
+                <a href="#work" class="interactive">ARCHIVE</a>
+                <a href="#contact" class="interactive">CONTACT</a>
+            </nav>
+        </div>
     </header>
 
     <main>
         <!-- Hero Section -->
         <section class="hero">
-            <h1 class="hero-title">CINEMATOGRAPHY<br>& FINE ART</h1>
+            <h1 class="hero-title">CINEMA <i>&</i> FINE ART</h1>
             <p class="hero-subtitle">DIRECTOR DE FOTOGRAFÍA & CINEASTA EXPERIMENTAL</p>
-            <div class="scroll-indicator">EXPLORAR ARCHIVO ↓</div>
+        </section>
+
+        <!-- Video Showreel Banner -->
+        <section class="reel-section">
+            <div class="reel-container interactive-video">
+                <video autoplay loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-dramatic-dark-scene-of-a-man-in-the-rain-41525-large.mp4"></video>
+                <div class="reel-overlay-text">2026 SHOWREEL — REEL #01</div>
+            </div>
         </section>
 
         <!-- Editorial Gallery -->
         <section class="portfolio-section" id="work">
             <div class="section-header">
-                <h2 class="section-title">SELECCIÓN EDITORIAL (2025–2026)</h2>
-                <span style="color: var(--text-muted); font-size:0.8rem;">[ 01 — 04 ]</span>
+                <h2 class="section-title">SELECCIÓN EDITORIAL</h2>
+                <span style="color: var(--text-muted); font-size:0.8rem; letter-spacing: 2px;">[ 01 — 04 ]</span>
             </div>
 
             <div class="editorial-grid">
                 
-                <!-- Work 1 -->
-                <div class="work-item item-1 interactive">
-                    <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1200&auto=format&fit=crop" alt="Cine Shot">
+                <!-- Work 1: Cinematic Shot with Video Hover -->
+                <div class="work-item item-1 interactive-video">
+                    <div class="tech-specs">ARRI ALEXA MINI / 35MM T1.4 / ISO 800</div>
+                    <div class="work-media">
+                        <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1200&auto=format&fit=crop" alt="Underpass">
+                        <video loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-tunnel-of-lights-in-a-futuristic-city-41560-large.mp4"></video>
+                    </div>
                     <div class="work-info">
                         <span class="work-title">EL PASADIZO</span>
                         <span>FILM / 35MM</span>
                     </div>
                 </div>
 
-                <!-- Work 2: Surreal / Rotated Shot inspired by user image -->
+                <!-- Work 2: Surreal / Rotated Shot (User Reference Style) -->
                 <div class="work-item item-2 interactive">
-                    <div style="width:100%; height:100%; overflow:hidden;">
+                    <div class="tech-specs">HASSELBLAD 500C / KODAK PORTRA 400</div>
+                    <div class="work-media">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop" class="surreal-frame" alt="Rotated Editorial Shot">
                     </div>
                     <div class="work-info">
@@ -324,21 +443,28 @@
                     </div>
                 </div>
 
-                <!-- Work 3 -->
+                <!-- Work 3: Live Documentary -->
                 <div class="work-item item-3 interactive">
-                    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop" alt="Live Concert">
+                    <div class="tech-specs">LEICA M10 / 28MM ELMARIT</div>
+                    <div class="work-media">
+                        <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop" alt="Live Concert">
+                    </div>
                     <div class="work-info">
                         <span class="work-title">LUZ & SOMBRA</span>
                         <span>DOCUMENTAL</span>
                     </div>
                 </div>
 
-                <!-- Work 4 -->
-                <div class="work-item item-4 interactive">
-                    <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1400&auto=format&fit=crop" alt="Stage Cinematography">
+                <!-- Work 4: Music Video Project with Video Hover -->
+                <div class="work-item item-4 interactive-video">
+                    <div class="tech-specs">RED V-RAPTOR / ANAMORPHIC 50MM</div>
+                    <div class="work-media">
+                        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1400&auto=format&fit=crop" alt="Stage Cinematography">
+                        <video loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-lights-of-a-night-concert-41551-large.mp4"></video>
+                    </div>
                     <div class="work-info">
                         <span class="work-title">NOCTURNO</span>
-                        <span>VIDEO MUSICAL / DIRECTION</span>
+                        <span>MUSIC VIDEO / DIRECTION</span>
                     </div>
                 </div>
 
@@ -351,15 +477,16 @@
         <div class="footer-links">
             <a href="#" class="interactive">INSTAGRAM</a>
             <a href="#" class="interactive">VIMEO</a>
-            <a href="#" class="interactive">READYMAG / ARCHIVE</a>
+            <a href="#" class="interactive">IMDB</a>
         </div>
     </footer>
 
     <script>
-        // Custom Magnetic Mouse Track
+        // Custom Cursor Logic
         const cursor = document.getElementById('cursor');
         const follower = document.getElementById('cursor-follower');
         const interactives = document.querySelectorAll('.interactive');
+        const videoInteractives = document.querySelectorAll('.interactive-video');
 
         let mouseX = 0, mouseY = 0;
         let followerX = 0, followerY = 0;
@@ -367,18 +494,15 @@
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-
             cursor.style.left = `${mouseX}px`;
             cursor.style.top = `${mouseY}px`;
         });
 
         function animateFollower() {
-            followerX += (mouseX - followerX) * 0.1;
-            followerY += (mouseY - followerY) * 0.1;
-
+            followerX += (mouseX - followerX) * 0.12;
+            followerY += (mouseY - followerY) * 0.12;
             follower.style.left = `${followerX}px`;
             follower.style.top = `${followerY}px`;
-
             requestAnimationFrame(animateFollower);
         }
         animateFollower();
@@ -387,6 +511,23 @@
             el.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
             el.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
         });
+
+        videoInteractives.forEach(el => {
+            const video = el.querySelector('video');
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('hovered', 'hovered-video');
+                if(video) video.play();
+            });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('hovered', 'hovered-video');
+                if(video) video.pause();
+            });
+        });
+
+        // Toggle Raw Lightbox Mode
+        function toggleRawMode() {
+            document.body.classList.toggle('raw-mode');
+        }
     </script>
 </body>
 </html>
