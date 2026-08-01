@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Reservas y Agenda</title>
+  <title>Pilates & Wellness Studio</title>
   <style>
     :root {
       --primary-color: #1a1a1a;
       --accent-color: #25d366;
-      --bg-color: #f8f9fa;
+      --bg-color: #fdfbf7;
       --card-bg: #ffffff;
       --border-color: #e2e8f0;
       --text-muted: #718096;
@@ -18,37 +18,62 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
       background-color: var(--bg-color);
       color: var(--primary-color);
-      padding: 20px;
+      line-height: 1.6;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
     }
 
     .container {
       max-width: 900px;
       margin: 0 auto;
+      padding: 0 20px 60px;
     }
 
-    /* Seccion de Contacto */
+    /* Sección de Contacto */
     .contact-card {
       background: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
       border: 1px solid var(--border-color);
+      text-align: center;
     }
 
     .contact-card h2 {
-      margin-bottom: 12px;
-      font-size: 1.25rem;
+      margin-bottom: 16px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      letter-spacing: 1px;
     }
 
     .contact-info {
       display: flex;
+      justify-content: center;
       flex-wrap: wrap;
       gap: 16px;
       align-items: center;
@@ -60,16 +85,17 @@
       gap: 8px;
       color: var(--primary-color);
       text-decoration: none;
-      font-weight: 600;
-      padding: 8px 16px;
-      border-radius: 8px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 30px;
       border: 1px solid var(--border-color);
       transition: all 0.2s ease;
+      font-size: 0.95rem;
     }
 
     .contact-link:hover {
       border-color: var(--primary-color);
-      background-color: #f1f5f9;
+      background-color: #f8fafc;
     }
 
     .contact-link.whatsapp {
@@ -85,30 +111,34 @@
     /* Modos (Cliente / Admin) */
     .mode-selector {
       display: flex;
+      justify-content: center;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .btn-mode {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background: #e2e8f0;
+      padding: 8px 18px;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background: transparent;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
     }
 
     .btn-mode.active {
       background: var(--primary-color);
       color: #ffffff;
+      border-color: var(--primary-color);
     }
 
     /* Calendario Grid */
     .calendar-container {
       background: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
       border: 1px solid var(--border-color);
     }
 
@@ -116,120 +146,164 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .calendar-header h2 {
+      font-size: 1.4rem;
+      font-weight: 500;
     }
 
     .weekdays-grid, .days-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
+      gap: 10px;
       text-align: center;
     }
 
     .weekday {
-      font-weight: bold;
+      font-weight: 600;
       color: var(--text-muted);
       font-size: 0.85rem;
-      padding-bottom: 8px;
+      padding-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .day-card {
-      min-height: 80px;
+      min-height: 90px;
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 8px;
+      border-radius: 12px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       cursor: pointer;
       background: #ffffff;
-      transition: border-color 0.2s;
+      transition: all 0.2s ease;
     }
 
     .day-card:hover {
       border-color: var(--primary-color);
+      transform: translateY(-2px);
     }
 
     .day-number {
-      font-size: 0.9rem;
-      font-weight: bold;
+      font-size: 0.95rem;
+      font-weight: 600;
       text-align: right;
     }
 
     .day-slots {
       font-size: 0.75rem;
-      padding: 4px;
-      border-radius: 4px;
-      background-color: #e6fffa;
-      color: #234e52;
+      padding: 4px 6px;
+      border-radius: 6px;
+      background-color: #f0fdf4;
+      color: #166534;
       font-weight: 600;
     }
 
     .day-card.disabled {
-      background-color: #f7fafc;
+      background-color: #f8fafc;
       cursor: not-allowed;
-      border-color: #edf2f7;
+      border-color: #f1f5f9;
+      opacity: 0.6;
+    }
+
+    .day-card.disabled:hover {
+      transform: none;
+      border-color: #f1f5f9;
     }
 
     .day-card.disabled .day-slots {
-      background-color: #edf2f7;
-      color: #a0aec0;
+      background-color: #f1f5f9;
+      color: #94a3b8;
     }
 
-    /* Admin Slot Form Panel */
+    /* Panel Admin */
     .admin-panel {
-      margin-top: 20px;
-      padding: 16px;
-      background: #f1f5f9;
-      border-radius: 8px;
+      margin-top: 24px;
+      padding: 20px;
+      background: #f8fafc;
+      border-radius: 12px;
       display: none;
+      border: 1px dashed var(--border-color);
     }
 
     .admin-panel.active {
       display: block;
     }
 
+    .admin-panel h3 {
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .admin-panel p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
     .admin-form {
       display: flex;
       gap: 12px;
       align-items: center;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .admin-form input[type="number"] {
-      padding: 8px;
-      border-radius: 6px;
+      padding: 10px;
+      border-radius: 8px;
       border: 1px solid var(--border-color);
-      width: 100px;
+      width: 120px;
+      outline: none;
     }
 
     .btn-submit {
-      padding: 8px 16px;
+      padding: 10px 20px;
       background: var(--primary-color);
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
 
+  <header>
+    <h1>Pilates Studio</h1>
+    <p>Reserva tu espacio y conecta con tu cuerpo</p>
+  </header>
+
   <div class="container">
 
-    <!-- Seccion de Contacto Actualizada -->
+    <!-- Sección de Contacto -->
     <section class="contact-card">
-      <h2>Información de Contacto</h2>
+      <h2>¿Tienes alguna duda? Contáctanos</h2>
       <div class="contact-info">
-        <!-- Telefono / WhatsApp directo -->
-        <a href="https://wa.me/50686909330?text=Hola,%20quisiera%20consultar%20sobre%20los%20cupos" 
+        <!-- WhatsApp Directo -->
+        <a href="https://wa.me/50686909330?text=Hola,%20quisiera%20consultar%20sobre%20las%20clases%20de%20pilates" 
            target="_blank" 
            rel="noopener noreferrer" 
            class="contact-link whatsapp">
-          📱 WhatsApp: 8690-9330
+          💬 Enviar WhatsApp (8690-9330)
         </a>
 
-        <!-- Correo Electrónico -->
+        <!-- Correo Electrónico Directo -->
         <a href="mailto:jimena092213@gmail.com" class="contact-link">
           ✉️ jimena092213@gmail.com
         </a>
@@ -259,42 +333,40 @@
       </div>
 
       <div id="calendar-days" class="days-grid">
-        <!-- Se genera dinámicamente con JS -->
+        <!-- Generado dinámicamente -->
       </div>
 
-      <!-- Formulario de Edición del Administrador -->
+      <!-- Editor para Administrador -->
       <div id="admin-editor" class="admin-panel">
-        <h3>Editar Disponibilidad</h3>
-        <p id="selected-date-text">Selecciona un día del calendario para ajustar sus cupos.</p>
+        <h3>Panel de Edición</h3>
+        <p id="selected-date-text">Haz clic en cualquier día del calendario para ajustar los cupos disponibles.</p>
         <div class="admin-form">
-          <input type="number" id="slots-input" min="0" placeholder="Cupos" disabled>
-          <button id="save-slots-btn" class="btn-submit" onclick="saveSlots()" disabled>Guardar Campos</button>
+          <input type="number" id="slots-input" min="0" placeholder="Cantidad de cupos" disabled>
+          <button id="save-slots-btn" class="btn-submit" onclick="saveSlots()" disabled>Guardar Cupos</button>
         </div>
       </div>
     </section>
 
   </div>
 
+  <footer>
+    &copy; 2026 Pilates Studio. Todos los derechos reservados.
+  </footer>
+
   <script>
-    // -------------------------------------------------------------
-    // ESTADO DE LA APLICACIÓN (Base de datos Local Simulada)
-    // -------------------------------------------------------------
-    let currentMode = 'client'; // 'client' o 'admin'
+    let currentMode = 'client';
     let selectedDateKey = null;
 
-    // Simulación de persistencia de datos (puedes conectarlo a Firebase)
-    let dbDisponibilidad = JSON.parse(localStorage.getItem('db_disponibilidad')) || {
-      "2026-08-05": 3,
-      "2026-08-10": 5,
-      "2026-08-15": 2
+    // Almacenamiento local para mantener los cambios guardados
+    let dbDisponibilidad = JSON.parse(localStorage.getItem('db_pilates_disponibilidad')) || {
+      "2026-08-05": 4,
+      "2026-08-10": 6,
+      "2026-08-12": 2
     };
 
     const year = 2026;
-    const month = 7; // Mes indexado en base 0: Agosto es 7
+    const month = 7; // Agosto (Base 0)
 
-    // -------------------------------------------------------------
-    // RENDERIZADO DEL CALENDARIO
-    // -------------------------------------------------------------
     function renderCalendar() {
       const daysContainer = document.getElementById('calendar-days');
       const monthYearTitle = document.getElementById('calendar-month-year');
@@ -306,13 +378,11 @@
       const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
       monthYearTitle.innerText = `${monthNames[month]} ${year}`;
 
-      // Rellenar espacios en blanco previos al primer día del mes
       for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement('div');
         daysContainer.appendChild(emptyCell);
       }
 
-      // Generar celdas del mes
       for (let day = 1; day <= totalDays; day++) {
         const dayTwoDigits = String(day).padStart(2, '0');
         const monthTwoDigits = String(month + 1).padStart(2, '0');
@@ -333,9 +403,6 @@
       }
     }
 
-    // -------------------------------------------------------------
-    // LÓGICA DE INTERACCIÓN
-    // -------------------------------------------------------------
     function setMode(mode) {
       currentMode = mode;
       document.getElementById('btn-client-mode').classList.toggle('active', mode === 'client');
@@ -355,7 +422,7 @@
     function handleDayClick(dateKey, currentSlots) {
       if (currentMode === 'admin') {
         selectedDateKey = dateKey;
-        document.getElementById('selected-date-text').innerText = `Modificando disponibilidad para: ${dateKey}`;
+        document.getElementById('selected-date-text').innerText = `Ajustando cupos para la fecha: ${dateKey}`;
         
         const input = document.getElementById('slots-input');
         const btn = document.getElementById('save-slots-btn');
@@ -365,9 +432,10 @@
         btn.disabled = false;
       } else {
         if (currentSlots > 0) {
-          alert(`Has seleccionado la fecha ${dateKey}. Redirigiendo a reserva...`);
+          const mensajeWhatsApp = encodeURIComponent(`Hola, quisiera agendar una clase para el día ${dateKey}`);
+          window.open(`https://wa.me/50686909330?text=${mensajeWhatsApp}`, '_blank');
         } else {
-          alert('Lo sentimos, no hay campos disponibles para este día.');
+          alert('No hay cupos disponibles para este día.');
         }
       }
     }
@@ -383,17 +451,16 @@
         return;
       }
 
-      // Guardar en la estructura de datos
       dbDisponibilidad[selectedDateKey] = newSlots;
-      localStorage.setItem('db_disponibilidad', JSON.stringify(dbDisponibilidad));
+      localStorage.setItem('db_pilates_disponibilidad', JSON.stringify(dbDisponibilidad));
 
-      alert(`Disponibilidad actualizada exitosamente para ${selectedDateKey}`);
+      alert(`Disponibilidad actualizada para la fecha ${selectedDateKey}`);
       renderCalendar();
     }
 
     function resetAdminForm() {
       selectedDateKey = null;
-      document.getElementById('selected-date-text').innerText = 'Selecciona un día del calendario para ajustar sus cupos.';
+      document.getElementById('selected-date-text').innerText = 'Haz clic en cualquier día del calendario para ajustar los cupos disponibles.';
       const input = document.getElementById('slots-input');
       const btn = document.getElementById('save-slots-btn');
       input.value = '';
@@ -401,7 +468,6 @@
       btn.disabled = true;
     }
 
-    // Inicializar Vista al Cargar la página
     renderCalendar();
   </script>
 </body>
