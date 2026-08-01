@@ -213,6 +213,20 @@
         @media (max-width: 1100px) { .classes-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 600px) { .classes-grid { grid-template-columns: 1fr; } }
 
+        /* ============ FORMAT / PRICING BY GROUP SIZE ============ */
+        .format-intro { max-width: 680px; color: var(--text-dim); font-size: 0.98rem; line-height: 1.75; margin-bottom: 40px; }
+        .format-intro b { color: var(--text-warm); font-weight: 500; }
+        .format-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 46px; }
+        .format-tag {
+            font-family: var(--serif); font-size: 1.02rem; color: var(--text-warm);
+            border: 1px solid var(--line); padding: 12px 20px; display: flex; align-items: baseline; gap: 10px;
+        }
+        .format-tag span { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 1px; color: var(--accent-sage); text-transform: uppercase; }
+        .format-table th { vertical-align: bottom; }
+        .th-sub { display: block; font-family: var(--sans); font-size: 0.6rem; letter-spacing: 1px; color: var(--text-faint); text-transform: none; margin-top: 4px; }
+        .format-table td .crc { display: block; font-family: var(--sans); font-size: 0.74rem; color: var(--text-dim); margin-top: 3px; }
+        .format-note { margin-top: 22px; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.5px; color: var(--text-faint); }
+
         /* ============ SCHEDULE ============ */
         .schedule-table { width: 100%; border-collapse: collapse; font-family: var(--mono); }
         .schedule-table th { text-align: left; font-size: 0.68rem; letter-spacing: 2px; color: var(--accent-sage); text-transform: uppercase; padding: 16px 20px; border-bottom: 1px solid var(--line); }
@@ -360,33 +374,67 @@
         <section class="section-wrap" id="clases">
             <div class="section-header reveal">
                 <div>
-                    <p class="section-eyebrow">Clases</p>
+                    <p class="section-eyebrow">Servicios</p>
                     <h2 class="section-title">Elige tu <em>formato</em></h2>
                 </div>
-                <span class="section-index">4 MODALIDADES</span>
+                <span class="section-index">MAT A DOMICILIO</span>
             </div>
-            <div class="classes-grid">
-                <div class="class-card interactive reveal">
-                    <div class="class-media"><img src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=900&auto=format&fit=crop" alt="Reformer"></div>
-                    <div class="class-level">Todos los niveles</div>
-                    <div class="class-body"><h3 class="class-title">Reformer</h3><p class="class-desc">Trabajo con resistencia de resortes para fuerza y estabilidad progresiva.</p></div>
-                </div>
-                <div class="class-card interactive reveal">
-                    <div class="class-media"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=900&auto=format&fit=crop" alt="Mat pilates"></div>
-                    <div class="class-level">Principiante</div>
-                    <div class="class-body"><h3 class="class-title">Mat</h3><p class="class-desc">Los ejercicios clásicos en el piso, con o sin accesorios pequeños.</p></div>
-                </div>
-                <div class="class-card interactive reveal">
-                    <div class="class-media"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=900&auto=format&fit=crop" alt="Aparatos"></div>
-                    <div class="class-level">Intermedio</div>
-                    <div class="class-body"><h3 class="class-title">Aparatos</h3><p class="class-desc">Cadillac, silla y barril combinados para trabajo tridimensional.</p></div>
-                </div>
-                <div class="class-card interactive reveal">
-                    <div class="class-media"><img src="https://images.unsplash.com/photo-1571731956672-f2b94d7dd0cb?q=80&w=900&auto=format&fit=crop" alt="Privada / Duo"></div>
-                    <div class="class-level">Personalizada</div>
-                    <div class="class-body"><h3 class="class-title">Privada / Duo</h3><p class="class-desc">Sesión uno a uno o en pareja, con programa adaptado a tu objetivo.</p></div>
-                </div>
+
+            <p class="format-intro reveal">Ofrecemos <b>mat a domicilio</b>, en modalidad <b>privada</b> o <b>grupal</b>. El precio es por persona y baja entre más personas tomen la clase juntas — tú eliges si prefieres una sesión individual o compartirla con más gente.</p>
+
+            <div class="format-grid reveal">
+                <div class="format-tag">Individual <span>1 persona</span></div>
+                <div class="format-tag">Dúo <span>2 personas</span></div>
+                <div class="format-tag">Trío <span>3 personas</span></div>
+                <div class="format-tag">Cuarteto <span>4 personas</span></div>
+                <div class="format-tag">Grupo <span>5+ personas</span></div>
             </div>
+
+            <div class="schedule-wrap reveal">
+                <table class="schedule-table format-table">
+                    <thead>
+                        <tr>
+                            <th>Modalidad</th>
+                            <th>Personas por clase</th>
+                            <th>4 clases / mes <span class="th-sub">precio por persona</span></th>
+                            <th>8 clases / mes <span class="th-sub">precio por persona</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Individual</td>
+                            <td><span class="tag-pill">1 persona</span></td>
+                            <td>$140 USD <span class="crc">≈ ₡72,800</span></td>
+                            <td>$260 USD <span class="crc">≈ ₡135,200</span></td>
+                        </tr>
+                        <tr>
+                            <td>Dúo</td>
+                            <td><span class="tag-pill">2 personas</span></td>
+                            <td>$100 USD <span class="crc">≈ ₡52,000</span></td>
+                            <td>$185 USD <span class="crc">≈ ₡96,200</span></td>
+                        </tr>
+                        <tr>
+                            <td>Trío</td>
+                            <td><span class="tag-pill">3 personas</span></td>
+                            <td>$80 USD <span class="crc">≈ ₡41,600</span></td>
+                            <td>$150 USD <span class="crc">≈ ₡78,000</span></td>
+                        </tr>
+                        <tr>
+                            <td>Cuarteto</td>
+                            <td><span class="tag-pill">4 personas</span></td>
+                            <td>$65 USD <span class="crc">≈ ₡33,800</span></td>
+                            <td>$120 USD <span class="crc">≈ ₡62,400</span></td>
+                        </tr>
+                        <tr>
+                            <td>Grupo</td>
+                            <td><span class="tag-pill">5+ personas</span></td>
+                            <td>$50 USD <span class="crc">≈ ₡26,000</span></td>
+                            <td>$95 USD <span class="crc">≈ ₡49,400</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="format-note reveal">Precios de referencia por persona. Tipo de cambio aproximado usado: ₡520 = $1 USD — ajusta según tus tarifas y el tipo de cambio real.</p>
         </section>
 
         <section class="section-wrap" id="horarios">
@@ -421,6 +469,7 @@
             </div>
             <div class="instructor-grid">
                 <div class="instructor-image reveal">
+                    <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=900&auto=format&fit=crop" alt="Jime, instructora de Pilates">
                 </div>
                 <div class="reveal">
                     <p class="instructor-quote">"No enseño a hacer más repeticiones. Enseño a <span>sentir</span> cada una de ellas."</p>
@@ -486,9 +535,9 @@
                     <p class="contact-sub">Escríbenos y te ayudamos a elegir el formato correcto según tu experiencia y objetivo.</p>
                     <div class="contact-rows">
                         <div><div class="spec-label">Email</div><a href="mailto:hola@pilatesjime.com" class="interactive">hola@pilatesjime.com</a></div>
-                        <div><div class="spec-label">WhatsApp</div><span class="val">+506 8690-9330</span></div>
+                        <div><div class="spec-label">WhatsApp</div><span class="val">+52 55 0000 0000</span></div>
                         <div><div class="spec-label">Instagram</div><a href="#" class="interactive">@pilatesjime</a></div>
-                        <div><div class="spec-label">Ubicación</div><span class="val">San Jose, Mata Redonda</span></div>
+                        <div><div class="spec-label">Ubicación</div><span class="val">Ciudad de México</span></div>
                     </div>
                 </div>
                 <div class="contact-map reveal">
