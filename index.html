@@ -216,15 +216,16 @@
         /* ============ FORMAT / PRICING BY GROUP SIZE ============ */
         .format-intro { max-width: 680px; color: var(--text-dim); font-size: 0.98rem; line-height: 1.75; margin-bottom: 40px; }
         .format-intro b { color: var(--text-warm); font-weight: 500; }
+        .format-hero { margin-bottom: 44px; }
+        .format-hero-eyebrow { display: block; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 3px; color: var(--accent-sage); text-transform: uppercase; margin-bottom: 10px; }
+        .format-hero-title { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: clamp(3.4rem, 9vw, 7.2rem); line-height: 0.9; color: var(--text-warm); }
+        .format-hero-sub { margin-top: 16px; font-size: 1rem; color: var(--text-dim); }
         .format-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 46px; }
         .format-tag {
             font-family: var(--serif); font-size: 1.02rem; color: var(--text-warm);
             border: 1px solid var(--line); padding: 12px 20px; display: flex; align-items: baseline; gap: 10px;
         }
         .format-tag span { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 1px; color: var(--accent-sage); text-transform: uppercase; }
-        .format-table th { vertical-align: bottom; }
-        .th-sub { display: block; font-family: var(--sans); font-size: 0.6rem; letter-spacing: 1px; color: var(--text-faint); text-transform: none; margin-top: 4px; }
-        .format-table td .crc { display: block; font-family: var(--sans); font-size: 0.74rem; color: var(--text-dim); margin-top: 3px; }
         .format-note { margin-top: 22px; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.5px; color: var(--text-faint); }
 
         /* ============ SCHEDULE ============ */
@@ -256,21 +257,27 @@
         @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
         /* ============ PRICING ============ */
-        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .price-card { border: 1px solid var(--line); padding: 44px 34px; background: var(--bg-panel); position: relative; transition: transform 0.4s ease, border-color 0.4s ease; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 26px; }
+        .price-card { border: 1px solid var(--line); padding: 38px 30px; background: var(--bg-panel); position: relative; transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; }
         .price-card.featured { border-color: var(--accent-brass); }
-        .price-card:hover { transform: translateY(-8px); }
+        .price-card:hover { transform: translateY(-8px); box-shadow: 0 24px 40px -20px rgba(0,0,0,0.4); }
         .price-badge { position: absolute; top: -1px; right: -1px; background: var(--accent-clay); color: #f5efe4; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 2px; padding: 6px 12px; text-transform: uppercase; }
-        .price-name { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 10px; }
-        .price-value { font-family: var(--serif); font-size: 2.6rem; margin-bottom: 4px; }
-        .price-value span { font-size: 1rem; color: var(--text-dim); font-family: var(--sans); }
-        .price-unit { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 30px; }
-        .price-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 34px; }
-        .price-features li { font-size: 0.88rem; color: var(--text-dim); padding-left: 18px; position: relative; }
-        .price-features li::before { content: '—'; position: absolute; left: 0; color: var(--accent-brass); }
-        .price-cta { display: block; text-align: center; padding: 13px; border: 1px solid var(--text-faint); color: var(--text-warm); text-decoration: none; font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s; }
-        .price-cta:hover { background: var(--accent-brass); border-color: var(--accent-brass); color: #16140f; }
-        @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
+        .price-name { font-family: var(--serif); font-size: 1.5rem; margin-bottom: 6px; }
+        .price-people { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 2px; color: var(--accent-sage); text-transform: uppercase; margin-bottom: 30px; }
+        .package-option { padding: 20px 0; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+        .package-info { display: flex; flex-direction: column; gap: 3px; }
+        .package-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 1.5px; color: var(--text-dim); text-transform: uppercase; }
+        .package-price { font-family: var(--serif); font-size: 1.5rem; color: var(--text-warm); }
+        .package-price small { font-family: var(--sans); font-size: 0.7rem; color: var(--text-dim); margin-left: 3px; }
+        .package-crc { font-family: var(--sans); font-size: 0.72rem; color: var(--text-dim); }
+        .package-btn {
+            flex-shrink: 0; display: inline-block; padding: 10px 18px; font-family: var(--sans);
+            font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;
+            color: var(--text-warm); border: 1px solid var(--accent-brass); text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .package-btn:hover { background: var(--accent-brass); color: #16140f; }
+        @media (max-width: 500px) { .package-option { flex-direction: column; align-items: flex-start; } .package-btn { width: 100%; text-align: center; } }
 
         /* ============ CONTACT ============ */
         .contact-section { padding: 130px 60px; }
@@ -382,6 +389,12 @@
 
             <p class="format-intro reveal">Ofrecemos <b>mat a domicilio</b>, en modalidad <b>privada</b> o <b>grupal</b>. El precio es por persona y baja entre más personas tomen la clase juntas — tú eliges si prefieres una sesión individual o compartirla con más gente.</p>
 
+            <div class="format-hero reveal">
+                <span class="format-hero-eyebrow">Estás eligiendo</span>
+                <h3 class="format-hero-title">Mat</h3>
+                <p class="format-hero-sub">a domicilio — ahora elige cuántas personas toman la clase</p>
+            </div>
+
             <div class="format-grid reveal">
                 <div class="format-tag">Individual <span>1 persona</span></div>
                 <div class="format-tag">Dúo <span>2 personas</span></div>
@@ -459,51 +472,116 @@
                 <span class="section-index">PRECIO POR PERSONA</span>
             </div>
 
-            <p class="format-intro reveal">El precio es <b>por persona</b> y baja entre más gente tome la clase junta. Elige tu modalidad y cuántas clases quieres al mes.</p>
+            <p class="format-intro reveal">El precio es <b>por persona</b> y baja entre más gente tome la clase junta. Haz clic en "Agendar" para reservar — te escribimos para confirmar el día y la hora.</p>
 
-            <div class="schedule-wrap reveal">
-                <table class="schedule-table format-table">
-                    <thead>
-                        <tr>
-                            <th>Modalidad</th>
-                            <th>Personas por clase</th>
-                            <th>4 clases / mes <span class="th-sub">precio por persona</span></th>
-                            <th>8 clases / mes <span class="th-sub">precio por persona</span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Individual</td>
-                            <td><span class="tag-pill">1 persona</span></td>
-                            <td>$140 USD <span class="crc">≈ ₡72,800</span></td>
-                            <td>$260 USD <span class="crc">≈ ₡135,200</span></td>
-                        </tr>
-                        <tr>
-                            <td>Dúo</td>
-                            <td><span class="tag-pill">2 personas</span></td>
-                            <td>$100 USD <span class="crc">≈ ₡52,000</span></td>
-                            <td>$185 USD <span class="crc">≈ ₡96,200</span></td>
-                        </tr>
-                        <tr>
-                            <td>Trío</td>
-                            <td><span class="tag-pill">3 personas</span></td>
-                            <td>$80 USD <span class="crc">≈ ₡41,600</span></td>
-                            <td>$150 USD <span class="crc">≈ ₡78,000</span></td>
-                        </tr>
-                        <tr>
-                            <td>Cuarteto</td>
-                            <td><span class="tag-pill">4 personas</span></td>
-                            <td>$65 USD <span class="crc">≈ ₡33,800</span></td>
-                            <td>$120 USD <span class="crc">≈ ₡62,400</span></td>
-                        </tr>
-                        <tr>
-                            <td>Grupo</td>
-                            <td><span class="tag-pill">5+ personas</span></td>
-                            <td>$50 USD <span class="crc">≈ ₡26,000</span></td>
-                            <td>$95 USD <span class="crc">≈ ₡49,400</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="pricing-grid reveal">
+
+                <div class="price-card">
+                    <div class="price-name">Individual</div>
+                    <div class="price-people">1 persona</div>
+                    <div class="package-option">
+                        <div class="package-info">
+                            <span class="package-label">4 clases / mes</span>
+                            <span class="package-price">$140 <small>USD</small></span>
+                            <span class="package-crc">≈ ₡72,800</span>
+                        </div>
+                        <a class="package-btn interactive" href="mailto:hola@pilatesjime.com?subject=Reservar%20Mat%20Individual%20-%204%20clases&body=Hola%2C%20quiero%20agendar%20el%20paquete%20Individual%20(4%20clases%20al%20mes)%20de%20Mat%20a%20domicilio.%20Mi%20disponibilidad%20es%3A">Agendar</a>
+                    </div>
+                    <div class="package-option">
+                        <div class="package-info">
+                            <span class="package-label">8 clases / mes</span>
+                            <span class="package-price">$260 <small>USD</small></span>
+                            <span class="package-crc">≈ ₡135,200</span>
+                        </div>
+                        <a class="package-btn interactive" href="mailto:hola@pilatesjime.com?subject=Reservar%20Mat%20Individual%20-%208%20clases&body=Hola%2C%20quiero%20agendar%20el%20paquete%20Individual%20(8%20clases%20al%20mes)%20de%20Mat%20a%20domicilio.%20Mi%20disponibilidad%20es%3A">Agendar</a>
+                    </div>
+                </div>
+
+                <div class="price-card featured">
+                    <div class="price-badge">Más popular</div>
+                    <div class="price-name">Dúo</div>
+                    <div class="price-people">2 personas</div>
+                    <div class="package-option">
+                        <div class="package-info">
+                            <span class="package-label">4 clases / mes</span>
+                            <span class="package-price">$100 <small>USD</small></span>
+                            <span class="package-crc">≈ ₡52,000</span>
+                        </div>
+                        <a class="package-btn interactive" href="mailto:hola@pilatesjime.com?subject=Reservar%20Mat%20Duo%20-%204%20clases&body=Hola%2C%20quiero%20agendar%20el%20paquete%20Duo%20(4%20clases%20al%20mes)%20de%20Mat%20a%20domicilio.%20Mi%20disponibilidad%20es%3A">Agendar</a>
+                    </div>
+                    <div class="package-option">
+                        <div class="package-info">
+                            <span class="package-label">8 clases / mes</span>
+                            <span class="package-price">$185 <small>USD</small></span>
+                            <span class="package-crc">≈ ₡96,200</span>
+                        </div>
+                        <a class="package-btn interactive" href="mailto:hola@pilatesjime.com?subject=Reservar%20Mat%20Duo%20-%208%20clases&body=Hola%2C%20quiero%20agendar%20el%20paquete%20Duo%20(8%20clases%20al%20mes)%20de%20Mat%20a%20domicilio.%20Mi%20disponibilidad%20es%3A">Agendar</a>
+                    </div>
+                </div>
+
+                <div class="price-card">
+                    <div class="price-name">Trío</div>
+                    <div class="price-people">3 personas</div>
+                    <div class="package-option">
+                        <div class="package-info">
+                            <span class="package-label">4 clases / mes</span>
+                            <span class="package-price">$80 <small>USD</small></span>
+                            <span class="package-crc">≈ ₡41,600</span>
+                        </div>
+                        <a class="package-btn interactive" href="mailto:hola@pilatesjime.com?subject=Reservar%20Mat%20Trio%20-%204%20clases&body=Hola%2C%20quiero%20agendar%20el%20paquete%20Trio%20(4%20clases%20al%20mes)%20de%20Mat%20a%20domicilio.%20Mi%20disponibilidad%20es%3A">Agendar</a>
+                    </div>
+                    <div class="package-option">
+                        <div class="package-info">
+                            <span class="package-label">8 clases / mes</span>
+                            <span class="package-price">$150 <small>USD</small></span>
+                            <span class="package-crc">≈ ₡78,000</span>
+                        </div>
+                        <a class="package-btn interactive" href="mailto:hola@pilatesjime.com?subject=Reservar%20Mat%20Trio%20-%208%20clases&body=Hola%2C%20quiero%20agendar%20el%20paquete%20Trio%20(8%20clases%20al%20mes)%20de%20Mat%20a%20domicilio.%20Mi%20disponibilidad%20es%3A">Agendar</a>
+                    </div>
+                </div>
+
+                <div class="price-card">
+                    <div class="price-name">Cuarteto</div>
+                    <div class="price-people">4 personas</div>
+                    <div class="package-option">
+                        <div class="package-info">
+                            <span class="package-label">4 clases / mes</span>
+                            <span class="package-price">$65 <small>USD</small></span>
+                            <span class="package-crc">≈ ₡33,800</span>
+                        </div>
+                        <a class="package-btn interactive" href="mailto:hola@pilatesjime.com?subject=Reservar%20Mat%20Cuarteto%20-%204%20clases&body=Hola%2C%20quiero%20agendar%20el%20paquete%20Cuarteto%20(4%20clases%20al%20mes)%20de%20Mat%20a%20domicilio.%20Mi%20disponibilidad%20es%3A">Agendar</a>
+                    </div>
+                    <div class="package-option">
+                        <div class="package-info">
+                            <span class="package-label">8 clases / mes</span>
+                            <span class="package-price">$120 <small>USD</small></span>
+                            <span class="package-crc">≈ ₡62,400</span>
+                        </div>
+                        <a class="package-btn interactive" href="mailto:hola@pilatesjime.com?subject=Reservar%20Mat%20Cuarteto%20-%208%20clases&body=Hola%2C%20quiero%20agendar%20el%20paquete%20Cuarteto%20(8%20clases%20al%20mes)%20de%20Mat%20a%20domicilio.%20Mi%20disponibilidad%20es%3A">Agendar</a>
+                    </div>
+                </div>
+
+                <div class="price-card">
+                    <div class="price-name">Grupo</div>
+                    <div class="price-people">5+ personas</div>
+                    <div class="package-option">
+                        <div class="package-info">
+                            <span class="package-label">4 clases / mes</span>
+                            <span class="package-price">$50 <small>USD</small></span>
+                            <span class="package-crc">≈ ₡26,000</span>
+                        </div>
+                        <a class="package-btn interactive" href="mailto:hola@pilatesjime.com?subject=Reservar%20Mat%20Grupo%20-%204%20clases&body=Hola%2C%20quiero%20agendar%20el%20paquete%20Grupo%20(4%20clases%20al%20mes)%20de%20Mat%20a%20domicilio.%20Mi%20disponibilidad%20es%3A">Agendar</a>
+                    </div>
+                    <div class="package-option">
+                        <div class="package-info">
+                            <span class="package-label">8 clases / mes</span>
+                            <span class="package-price">$95 <small>USD</small></span>
+                            <span class="package-crc">≈ ₡49,400</span>
+                        </div>
+                        <a class="package-btn interactive" href="mailto:hola@pilatesjime.com?subject=Reservar%20Mat%20Grupo%20-%208%20clases&body=Hola%2C%20quiero%20agendar%20el%20paquete%20Grupo%20(8%20clases%20al%20mes)%20de%20Mat%20a%20domicilio.%20Mi%20disponibilidad%20es%3A">Agendar</a>
+                    </div>
+                </div>
+
             </div>
             <p class="format-note reveal">Precios de referencia por persona. Tipo de cambio aproximado usado: ₡520 = $1 USD — ajusta según tus tarifas y el tipo de cambio real.</p>
         </section>
