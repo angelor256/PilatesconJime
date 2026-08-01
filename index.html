@@ -1,474 +1,533 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pilates & Wellness Studio</title>
-  <style>
-    :root {
-      --primary-color: #1a1a1a;
-      --accent-color: #25d366;
-      --bg-color: #fdfbf7;
-      --card-bg: #ffffff;
-      --border-color: #e2e8f0;
-      --text-muted: #718096;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PILATES JIME — Movimiento con Intención</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-void: #f3ede0;
+            --bg-panel: #ffffff;
+            --bg-panel-2: #ece3d1;
+            --text-warm: #211d15;
+            --text-dim: #6b6455;
+            --text-faint: #a89f8b;
+            --accent-brass: #c9a35f;
+            --accent-clay: #a8543a;
+            --accent-sage: #8a9b78;
+            --line: #e1d7bf;
+            --mono: 'IBM Plex Mono', monospace;
+            --serif: 'Fraunces', serif;
+            --sans: 'Work Sans', sans-serif;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--bg-void);
+            color: var(--text-warm);
+            font-family: var(--sans);
+            overflow-x: hidden;
+        }
 
-    body {
-      background-color: var(--bg-color);
-      color: var(--primary-color);
-      line-height: 1.6;
-    }
+        ::selection { background: var(--accent-clay); color: #ffffff; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-void); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-brass); }
 
-    header {
-      text-align: center;
-      padding: 60px 20px 40px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
+        /* ============ HEADER ============ */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 24px 60px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 100;
+            transition: all 0.4s ease;
+            background: rgba(243,237,224,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line);
+        }
+        .brand-logo { font-family: var(--serif); font-size: 1.35rem; letter-spacing: 1px; font-style: italic; font-weight: 500; color: var(--text-warm); text-decoration: none;}
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        nav { display: flex; gap: 24px; }
+        nav a {
+            color: var(--text-warm); text-decoration: none; font-size: 0.78rem; letter-spacing: 1.5px;
+            text-transform: uppercase; transition: opacity 0.3s; font-weight: 500;
+        }
+        nav a:hover { opacity: 0.55; }
+        
+        .admin-trigger-btn {
+            background: transparent; border: 1px solid var(--accent-brass); color: var(--accent-brass);
+            padding: 7px 14px; font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase;
+            font-family: var(--mono); cursor: pointer; transition: all 0.3s;
+        }
+        .admin-trigger-btn:hover { background: var(--accent-brass); color: #fff; }
 
-    header h1 {
-      font-size: 2.5rem;
-      font-weight: 300;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
+        .cta-btn {
+            background: var(--accent-clay); color: #f5efe4; border: none; padding: 10px 20px;
+            font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
+            transition: background 0.3s, transform 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .cta-btn:hover { background: var(--accent-brass); transform: translateY(-2px); }
 
-    header p {
-      color: var(--text-muted);
-      font-size: 1.1rem;
-    }
+        /* ============ MAIN LAYOUT ============ */
+        .section-wrap { padding: 120px 60px 80px 60px; max-width: 1300px; margin: 0 auto; }
+        .section-header { margin-bottom: 40px; border-bottom: 1px solid var(--line); padding-bottom: 18px; }
+        .section-eyebrow { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 3px; color: var(--accent-sage); text-transform: uppercase; margin-bottom: 8px; }
+        .section-title { font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 400; }
+        .section-title em { font-style: italic; color: var(--accent-brass); }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 20px 60px;
-    }
+        /* ============ CALENDAR SECTION ============ */
+        .calendar-container {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 30px;
+            background: var(--bg-panel);
+            border: 1px solid var(--line);
+            padding: 30px;
+            border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
 
-    /* Sección de Contacto */
-    .contact-card {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 32px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-      border: 1px solid var(--border-color);
-      text-align: center;
-    }
+        .cal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .cal-title { font-family: var(--serif); font-size: 1.4rem; font-weight: 500; }
+        .cal-nav-btn {
+            background: var(--bg-void); border: 1px solid var(--line); padding: 6px 14px;
+            cursor: pointer; font-family: var(--mono); font-size: 0.8rem; transition: all 0.2s;
+        }
+        .cal-nav-btn:hover { background: var(--accent-brass); color: #fff; }
 
-    .contact-card h2 {
-      margin-bottom: 16px;
-      font-size: 1.2rem;
-      font-weight: 500;
-      letter-spacing: 1px;
-    }
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            text-align: center;
+        }
+        .cal-day-name {
+            font-family: var(--mono); font-size: 0.65rem; color: var(--accent-sage); text-transform: uppercase;
+            padding-bottom: 10px; font-weight: 600;
+        }
+        .cal-day-cell {
+            aspect-ratio: 1;
+            border: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: var(--bg-void);
+            transition: all 0.2s;
+            position: relative;
+        }
+        .cal-day-cell:hover:not(.empty) {
+            border-color: var(--accent-brass);
+            background: #fff;
+        }
+        .cal-day-cell.selected {
+            background: var(--accent-brass);
+            color: #fff;
+            border-color: var(--accent-brass);
+        }
+        .cal-day-cell.empty { background: transparent; border: none; cursor: default; }
+        .cal-day-num { font-family: var(--mono); font-size: 0.95rem; font-weight: 500; }
+        .cal-indicator {
+            width: 4px; height: 4px; border-radius: 50%; background: var(--accent-clay); position: absolute; bottom: 6px;
+        }
 
-    .contact-info {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-    }
+        /* Slots Panel Side */
+        .slots-panel {
+            border-left: 1px solid var(--line);
+            padding-left: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+        .slots-header {
+            font-family: var(--serif); font-size: 1.2rem; margin-bottom: 20px; color: var(--text-warm);
+            border-bottom: 1px solid var(--line); padding-bottom: 10px;
+        }
+        .slot-card {
+            border: 1px solid var(--line);
+            background: var(--bg-void);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .slot-time { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; }
+        .slot-class { font-size: 0.85rem; color: var(--text-dim); margin-top: 2px; }
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+            border-radius: 12px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; font-family: var(--mono);
+        }
+        .status-badge.available { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+        .status-badge.few { background: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+        .status-badge.full { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
 
-    .contact-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--primary-color);
-      text-decoration: none;
-      font-weight: 500;
-      padding: 10px 20px;
-      border-radius: 30px;
-      border: 1px solid var(--border-color);
-      transition: all 0.2s ease;
-      font-size: 0.95rem;
-    }
+        /* ============ CONTACT INFO ============ */
+        .contact-box {
+            margin-top: 50px;
+            background: var(--bg-panel-2);
+            padding: 30px;
+            border: 1px solid var(--line);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .contact-item { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 0.9rem; }
+        .contact-item a { color: var(--text-warm); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .contact-item a:hover { color: var(--accent-clay); }
 
-    .contact-link:hover {
-      border-color: var(--primary-color);
-      background-color: #f8fafc;
-    }
+        /* ============ ADMIN MODAL ============ */
+        #admin-modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+            z-index: 10001; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        #admin-modal.active { opacity: 1; pointer-events: auto; }
+        .admin-card {
+            background: var(--bg-panel); border: 1px solid var(--line); width: 90%; max-width: 750px;
+            max-height: 85vh; overflow-y: auto; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-radius: 6px;
+        }
+        .admin-card h3 { font-family: var(--serif); font-size: 1.5rem; margin-bottom: 20px; color: var(--text-warm); }
+        .admin-input { width: 100%; padding: 8px 10px; font-family: var(--sans); font-size: 0.85rem; border: 1px solid var(--line); background: var(--bg-void); }
+        .admin-row-edit { display: grid; grid-template-columns: 1fr 1fr 0.8fr 0.8fr auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+        .admin-btn {
+            background: var(--accent-brass); color: #fff; border: none; padding: 8px 16px;
+            font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; cursor: pointer; transition: background 0.2s;
+        }
+        .admin-btn:hover { background: var(--accent-clay); }
+        .admin-btn-danger { background: #c62828; }
+        .admin-btn-danger:hover { background: #b71c1c; }
 
-    .contact-link.whatsapp {
-      background-color: var(--accent-color);
-      color: #ffffff;
-      border: none;
-    }
-
-    .contact-link.whatsapp:hover {
-      opacity: 0.9;
-    }
-
-    /* Modos (Cliente / Admin) */
-    .mode-selector {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .btn-mode {
-      padding: 8px 18px;
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      background: transparent;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
-    }
-
-    .btn-mode.active {
-      background: var(--primary-color);
-      color: #ffffff;
-      border-color: var(--primary-color);
-    }
-
-    /* Calendario Grid */
-    .calendar-container {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-      border: 1px solid var(--border-color);
-    }
-
-    .calendar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .calendar-header h2 {
-      font-size: 1.4rem;
-      font-weight: 500;
-    }
-
-    .weekdays-grid, .days-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
-      text-align: center;
-    }
-
-    .weekday {
-      font-weight: 600;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      padding-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .day-card {
-      min-height: 90px;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: pointer;
-      background: #ffffff;
-      transition: all 0.2s ease;
-    }
-
-    .day-card:hover {
-      border-color: var(--primary-color);
-      transform: translateY(-2px);
-    }
-
-    .day-number {
-      font-size: 0.95rem;
-      font-weight: 600;
-      text-align: right;
-    }
-
-    .day-slots {
-      font-size: 0.75rem;
-      padding: 4px 6px;
-      border-radius: 6px;
-      background-color: #f0fdf4;
-      color: #166534;
-      font-weight: 600;
-    }
-
-    .day-card.disabled {
-      background-color: #f8fafc;
-      cursor: not-allowed;
-      border-color: #f1f5f9;
-      opacity: 0.6;
-    }
-
-    .day-card.disabled:hover {
-      transform: none;
-      border-color: #f1f5f9;
-    }
-
-    .day-card.disabled .day-slots {
-      background-color: #f1f5f9;
-      color: #94a3b8;
-    }
-
-    /* Panel Admin */
-    .admin-panel {
-      margin-top: 24px;
-      padding: 20px;
-      background: #f8fafc;
-      border-radius: 12px;
-      display: none;
-      border: 1px dashed var(--border-color);
-    }
-
-    .admin-panel.active {
-      display: block;
-    }
-
-    .admin-panel h3 {
-      font-size: 1.1rem;
-      margin-bottom: 4px;
-    }
-
-    .admin-panel p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .admin-form {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      margin-top: 12px;
-    }
-
-    .admin-form input[type="number"] {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      width: 120px;
-      outline: none;
-    }
-
-    .btn-submit {
-      padding: 10px 20px;
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    .btn-submit:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-  </style>
+        @media (max-width: 850px) {
+            .calendar-container { grid-template-columns: 1fr; }
+            .slots-panel { border-left: none; border-top: 1px solid var(--line); padding-left: 0; padding-top: 20px; }
+            header { padding: 15px 20px; }
+            .section-wrap { padding: 100px 20px 40px 20px; }
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <h1>Pilates Studio</h1>
-    <p>Reserva tu espacio y conecta con tu cuerpo</p>
-  </header>
+    <!-- HEADER -->
+    <header>
+        <a href="#" class="brand-logo">PILATES JIME</a>
+        <div class="nav-right">
+            <nav>
+                <a href="#calendario">Horarios</a>
+                <a href="#contacto">Contacto</a>
+            </nav>
+            <button class="admin-trigger-btn" onclick="openAdminModal()">Admin Panel</button>
+            <a href="https://wa.me/50686909330" target="_blank" class="cta-btn">
+                <span>WhatsApp</span>
+            </a>
+        </div>
+    </header>
 
-  <div class="container">
+    <!-- CALENDARIO SECTION -->
+    <section class="section-wrap" id="calendario">
+        <div class="section-header">
+            <div class="section-eyebrow">Reserva de Clases</div>
+            <h2 class="section-title">Calendario de <em>Sesiones</em></h2>
+        </div>
 
-    <!-- Sección de Contacto -->
-    <section class="contact-card">
-      <h2>¿Tienes alguna duda? Contáctanos</h2>
-      <div class="contact-info">
-        <!-- WhatsApp Directo -->
-        <a href="https://wa.me/50686909330?text=Hola,%20quisiera%20consultar%20sobre%20las%20clases%20de%20pilates" 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           class="contact-link whatsapp">
-          💬 Enviar WhatsApp (8690-9330)
-        </a>
+        <div class="calendar-container">
+            <!-- Calendario Gráfico Interactivo -->
+            <div>
+                <div class="cal-header">
+                    <button class="cal-nav-btn" onclick="changeMonth(-1)">&lt; Ant</button>
+                    <div class="cal-title" id="cal-month-year">Cargando...</div>
+                    <button class="cal-nav-btn" onclick="changeMonth(1)">Sig &gt;</button>
+                </div>
+                <div class="cal-grid" id="cal-grid">
+                    <!-- Generado dinámicamente -->
+                </div>
+            </div>
 
-        <!-- Correo Electrónico Directo -->
-        <a href="mailto:jimena092213@gmail.com" class="contact-link">
-          ✉️ jimena092213@gmail.com
-        </a>
-      </div>
+            <!-- Panel Lateral de Campos/Horarios del Día -->
+            <div class="slots-panel">
+                <div class="slots-header" id="selected-date-label">Selecciona un día</div>
+                <div id="slots-list">
+                    <!-- Se llena con JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACTO INFO -->
+        <div class="contact-box" id="contacto">
+            <div class="contact-item">
+                <strong>Teléfono / WhatsApp:</strong>
+                <a href="https://wa.me/50686909330" target="_blank">8690-9330</a>
+            </div>
+            <div class="contact-item">
+                <strong>Correo Electrónico:</strong>
+                <a href="mailto:jimena092213@gmail.com">jimena092213@gmail.com</a>
+            </div>
+        </div>
     </section>
 
-    <!-- Control de Vista (Cliente vs Admin) -->
-    <div class="mode-selector">
-      <button id="btn-client-mode" class="btn-mode active" onclick="setMode('client')">Vista Cliente</button>
-      <button id="btn-admin-mode" class="btn-mode" onclick="setMode('admin')">Vista Administrador</button>
+    <!-- MODAL PANEL DE ADMINISTRACIÓN -->
+    <div id="admin-modal">
+        <div class="admin-card">
+            <h3>Administrar Calendario y Campos</h3>
+            <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 15px;">
+                Selecciona una fecha para agregar, modificar la capacidad de campos o eliminar horarios disponibles.
+            </p>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="font-family: var(--mono); font-size: 0.75rem;">SELECCIONAR FECHA A EDITAR:</label>
+                <input type="date" id="admin-date-picker" class="admin-input" style="margin-top: 5px;" onchange="loadAdminDateSlots()">
+            </div>
+
+            <div id="admin-slots-container">
+                <!-- Se llena con JS -->
+            </div>
+
+            <div style="margin-top: 20px; border-top: 1px solid var(--line); padding-top: 15px;">
+                <h4 style="font-family: var(--serif); margin-bottom: 10px;">Agregar Nuevo Horario / Campo</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 0.8fr 0.8fr; gap: 8px;">
+                    <input type="text" id="new-time" class="admin-input" placeholder="Horario (e.g. 08:00 AM)">
+                    <input type="text" id="new-class" class="admin-input" placeholder="Tipo (e.g. Pilates Reformer)">
+                    <input type="number" id="new-total" class="admin-input" placeholder="Capacidad">
+                    <input type="number" id="new-available" class="admin-input" placeholder="Cupos Libres">
+                </div>
+                <button class="admin-btn" style="margin-top: 10px; width: 100%;" onclick="addNewSlot()">+ Agregar Campo al Calendario</button>
+            </div>
+
+            <div style="margin-top: 25px; display: flex; justify-content: flex-end;">
+                <button class="admin-btn" onclick="closeAdminModal()">Guardar y Cerrar</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Calendario Principal -->
-    <section class="calendar-container">
-      <div class="calendar-header">
-        <h2 id="calendar-month-year">Cargando Mes...</h2>
-      </div>
+    <script>
+        // Data Store en Memoria / LocalStorage para persistencia local
+        let calendarData = JSON.parse(localStorage.getItem('pilates_schedule')) || {
+            "2026-08-03": [
+                { id: 1, time: "07:00 AM", className: "Reformer Flow", total: 6, available: 2 },
+                { id: 2, time: "09:00 AM", className: "Mat Full Body", total: 8, available: 5 }
+            ],
+            "2026-08-04": [
+                { id: 3, time: "08:00 AM", className: "Reformer Cardio", total: 6, available: 0 }
+            ]
+        };
 
-      <div class="weekdays-grid">
-        <div class="weekday">Dom</div>
-        <div class="weekday">Lun</div>
-        <div class="weekday">Mar</div>
-        <div class="weekday">Mié</div>
-        <div class="weekday">Jue</div>
-        <div class="weekday">Vie</div>
-        <div class="weekday">Sáb</div>
-      </div>
-
-      <div id="calendar-days" class="days-grid">
-        <!-- Generado dinámicamente -->
-      </div>
-
-      <!-- Editor para Administrador -->
-      <div id="admin-editor" class="admin-panel">
-        <h3>Panel de Edición</h3>
-        <p id="selected-date-text">Haz clic en cualquier día del calendario para ajustar los cupos disponibles.</p>
-        <div class="admin-form">
-          <input type="number" id="slots-input" min="0" placeholder="Cantidad de cupos" disabled>
-          <button id="save-slots-btn" class="btn-submit" onclick="saveSlots()" disabled>Guardar Cupos</button>
-        </div>
-      </div>
-    </section>
-
-  </div>
-
-  <footer>
-    &copy; 2026 Pilates Studio. Todos los derechos reservados.
-  </footer>
-
-  <script>
-    let currentMode = 'client';
-    let selectedDateKey = null;
-
-    // Almacenamiento local para mantener los cambios guardados
-    let dbDisponibilidad = JSON.parse(localStorage.getItem('db_pilates_disponibilidad')) || {
-      "2026-08-05": 4,
-      "2026-08-10": 6,
-      "2026-08-12": 2
-    };
-
-    const year = 2026;
-    const month = 7; // Agosto (Base 0)
-
-    function renderCalendar() {
-      const daysContainer = document.getElementById('calendar-days');
-      const monthYearTitle = document.getElementById('calendar-month-year');
-      daysContainer.innerHTML = '';
-
-      const firstDay = new Date(year, month, 1).getDay();
-      const totalDays = new Date(year, month + 1, 0).getDate();
-
-      const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-      monthYearTitle.innerText = `${monthNames[month]} ${year}`;
-
-      for (let i = 0; i < firstDay; i++) {
-        const emptyCell = document.createElement('div');
-        daysContainer.appendChild(emptyCell);
-      }
-
-      for (let day = 1; day <= totalDays; day++) {
-        const dayTwoDigits = String(day).padStart(2, '0');
-        const monthTwoDigits = String(month + 1).padStart(2, '0');
-        const dateKey = `${year}-${monthTwoDigits}-${dayTwoDigits}`;
-        
-        const slotsAvailable = dbDisponibilidad[dateKey] || 0;
-
-        const dayCard = document.createElement('div');
-        dayCard.className = `day-card ${slotsAvailable === 0 ? 'disabled' : ''}`;
-        
-        dayCard.innerHTML = `
-          <div class="day-number">${day}</div>
-          <div class="day-slots">${slotsAvailable > 0 ? slotsAvailable + ' cupos' : 'Agotado'}</div>
-        `;
-
-        dayCard.onclick = () => handleDayClick(dateKey, slotsAvailable);
-        daysContainer.appendChild(dayCard);
-      }
-    }
-
-    function setMode(mode) {
-      currentMode = mode;
-      document.getElementById('btn-client-mode').classList.toggle('active', mode === 'client');
-      document.getElementById('btn-admin-mode').classList.toggle('active', mode === 'admin');
-      
-      const adminPanel = document.getElementById('admin-editor');
-      if (mode === 'admin') {
-        adminPanel.classList.add('active');
-      } else {
-        adminPanel.classList.remove('active');
-      }
-      
-      resetAdminForm();
-      renderCalendar();
-    }
-
-    function handleDayClick(dateKey, currentSlots) {
-      if (currentMode === 'admin') {
-        selectedDateKey = dateKey;
-        document.getElementById('selected-date-text').innerText = `Ajustando cupos para la fecha: ${dateKey}`;
-        
-        const input = document.getElementById('slots-input');
-        const btn = document.getElementById('save-slots-btn');
-        
-        input.value = currentSlots;
-        input.disabled = false;
-        btn.disabled = false;
-      } else {
-        if (currentSlots > 0) {
-          const mensajeWhatsApp = encodeURIComponent(`Hola, quisiera agendar una clase para el día ${dateKey}`);
-          window.open(`https://wa.me/50686909330?text=${mensajeWhatsApp}`, '_blank');
-        } else {
-          alert('No hay cupos disponibles para este día.');
+        function saveLocalData() {
+            localStorage.setItem('pilates_schedule', JSON.stringify(calendarData));
+            renderCalendar();
+            renderSlotsForSelectedDate();
         }
-      }
-    }
 
-    function saveSlots() {
-      if (!selectedDateKey) return;
-      
-      const input = document.getElementById('slots-input');
-      const newSlots = parseInt(input.value, 10);
+        let currentDate = new Date(2026, 7, 1); // Agosto 2026
+        let selectedDateStr = "2026-08-03";
 
-      if (isNaN(newSlots) || newSlots < 0) {
-        alert("Por favor ingresa un número de cupos válido.");
-        return;
-      }
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-      dbDisponibilidad[selectedDateKey] = newSlots;
-      localStorage.setItem('db_pilates_disponibilidad', JSON.stringify(dbDisponibilidad));
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
 
-      alert(`Disponibilidad actualizada para la fecha ${selectedDateKey}`);
-      renderCalendar();
-    }
+            document.getElementById('cal-month-year').innerText = `${monthNames[month]} ${year}`;
 
-    function resetAdminForm() {
-      selectedDateKey = null;
-      document.getElementById('selected-date-text').innerText = 'Haz clic en cualquier día del calendario para ajustar los cupos disponibles.';
-      const input = document.getElementById('slots-input');
-      const btn = document.getElementById('save-slots-btn');
-      input.value = '';
-      input.disabled = true;
-      btn.disabled = true;
-    }
+            const grid = document.getElementById('cal-grid');
+            grid.innerHTML = '';
 
-    renderCalendar();
-  </script>
+            // Días de la semana
+            const dayHeaders = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            dayHeaders.forEach(dh => {
+                const el = document.createElement('div');
+                el.className = 'cal-day-name';
+                el.innerText = dh;
+                grid.appendChild(el);
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Espacios en blanco previo al día 1
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'cal-day-cell empty';
+                grid.appendChild(emptyCell);
+            }
+
+            // Celdas del mes
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cell = document.createElement('div');
+                const formattedDay = String(day).padStart(2, '0');
+                const formattedMonth = String(month + 1).padStart(2, '0');
+                const dateKey = `${year}-${formattedMonth}-${formattedDay}`;
+
+                cell.className = 'cal-day-cell';
+                if (dateKey === selectedDateStr) cell.classList.add('selected');
+
+                cell.innerHTML = `<span class="cal-day-num">${day}</span>`;
+
+                if (calendarData[dateKey] && calendarData[dateKey].length > 0) {
+                    const ind = document.createElement('div');
+                    ind.className = 'cal-indicator';
+                    cell.appendChild(ind);
+                }
+
+                cell.onclick = () => {
+                    selectedDateStr = dateKey;
+                    renderCalendar();
+                    renderSlotsForSelectedDate();
+                };
+
+                grid.appendChild(cell);
+            }
+        }
+
+        function changeMonth(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function renderSlotsForSelectedDate() {
+            const label = document.getElementById('selected-date-label');
+            const list = document.getElementById('slots-list');
+            
+            label.innerText = `Horarios: ${selectedDateStr}`;
+            list.innerHTML = '';
+
+            const slots = calendarData[selectedDateStr] || [];
+
+            if (slots.length === 0) {
+                list.innerHTML = `<div style="color: var(--text-faint); font-family: var(--mono); font-size: 0.85rem; padding: 20px 0;">No hay campos o clases configuradas para esta fecha.</div>`;
+                return;
+            }
+
+            slots.forEach(slot => {
+                let badgeClass = "available";
+                let badgeText = `${slot.available} Disponibles`;
+
+                if (slot.available === 0) {
+                    badgeClass = "full";
+                    badgeText = "Agotado";
+                } else if (slot.available <= 2) {
+                    badgeClass = "few";
+                    badgeText = `¡Últimos ${slot.available}!`;
+                }
+
+                const card = document.createElement('div');
+                card.className = 'slot-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="slot-time">${slot.time}</div>
+                        <div class="slot-class">${slot.className} (Capacidad: ${slot.total})</div>
+                    </div>
+                    <a href="https://wa.me/50686909330?text=Hola%20Jime,%20me%20gustaría%20reservar%20un%20campo%20para%20la%20clase%20de%20${encodeURIComponent(slot.className)}%20el%20día%20${selectedDateStr}%20a%20las%20${encodeURIComponent(slot.time)}" target="_blank" style="text-decoration:none;">
+                        <span class="status-badge ${badgeClass}">${badgeText}</span>
+                    </a>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        /* ============ LÓGICA DE ADMINISTRACIÓN ============ */
+        function openAdminModal() {
+            document.getElementById('admin-modal').classList.add('active');
+            document.getElementById('admin-date-picker').value = selectedDateStr;
+            loadAdminDateSlots();
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.remove('active');
+        }
+
+        function loadAdminDateSlots() {
+            const dateVal = document.getElementById('admin-date-picker').value;
+            const container = document.getElementById('admin-slots-container');
+            container.innerHTML = '';
+
+            if (!dateVal) return;
+
+            const slots = calendarData[dateVal] || [];
+
+            if (slots.length === 0) {
+                container.innerHTML = `<p style="font-size:0.8rem; color: var(--text-dim);">Sin horarios registrados para esta fecha.</p>`;
+                return;
+            }
+
+            slots.forEach((slot, index) => {
+                const row = document.createElement('div');
+                row.className = 'admin-row-edit';
+                row.innerHTML = `
+                    <input type="text" class="admin-input" value="${slot.time}" onchange="updateSlot(${index}, 'time', this.value)">
+                    <input type="text" class="admin-input" value="${slot.className}" onchange="updateSlot(${index}, 'className', this.value)">
+                    <input type="number" class="admin-input" value="${slot.total}" title="Capacidad Total" onchange="updateSlot(${index}, 'total', parseInt(this.value))">
+                    <input type="number" class="admin-input" value="${slot.available}" title="Cupos Disponibles" onchange="updateSlot(${index}, 'available', parseInt(this.value))">
+                    <button class="admin-btn admin-btn-danger" onclick="deleteSlot(${index})">X</button>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function updateSlot(index, field, value) {
+            const dateVal = document.getElementById('admin-date-picker').value;
+            if (calendarData[dateVal] && calendarData[dateVal][index]) {
+                calendarData[dateVal][index][field] = value;
+                saveLocalData();
+            }
+        }
+
+        function deleteSlot(index) {
+            const dateVal = document.getElementById('admin-date-picker').value;
+            if (calendarData[dateVal]) {
+                calendarData[dateVal].splice(index, 1);
+                saveLocalData();
+                loadAdminDateSlots();
+            }
+        }
+
+        function addNewSlot() {
+            const dateVal = document.getElementById('admin-date-picker').value;
+            const time = document.getElementById('new-time').value;
+            const className = document.getElementById('new-class').value;
+            const total = parseInt(document.getElementById('new-total').value) || 6;
+            const available = parseInt(document.getElementById('new-available').value) || total;
+
+            if (!dateVal || !time || !className) {
+                alert("Por favor completa los campos obligatorios: Fecha, Horario y Tipo de clase.");
+                return;
+            }
+
+            if (!calendarData[dateVal]) {
+                calendarData[dateVal] = [];
+            }
+
+            calendarData[dateVal].push({
+                id: Date.now(),
+                time: time,
+                className: className,
+                total: total,
+                available: available
+            });
+
+            // Limpieza
+            document.getElementById('new-time').value = '';
+            document.getElementById('new-class').value = '';
+            document.getElementById('new-total').value = '';
+            document.getElementById('new-available').value = '';
+
+            saveLocalData();
+            loadAdminDateSlots();
+        }
+
+        // Inicialización
+        renderCalendar();
+        renderSlotsForSelectedDate();
+    </script>
 </body>
 </html>
