@@ -131,37 +131,46 @@
 
         /* ============ HERO ============ */
         .hero {
-            min-height: 100vh; width: 100%; display: flex; flex-direction: column;
-            justify-content: center; padding: 160px 60px 100px 60px; position: relative;
+            min-height: 100vh; width: 100%; display: grid; grid-template-columns: 1.15fr 0.85fr; align-items: center;
+            gap: 60px; padding: 150px 60px 90px 60px; position: relative;
         }
         .hero-eyebrow {
             font-family: var(--mono); font-size: 0.68rem; letter-spacing: 4px; color: var(--accent-sage);
             text-transform: uppercase; margin-bottom: 30px; opacity: 0; animation: fadeUp 1s ease 0.3s forwards;
         }
         .hero-title {
-            font-family: var(--serif); font-size: clamp(2.6rem, 6.5vw, 6.4rem); font-weight: 400;
-            line-height: 1.02; letter-spacing: -1px; max-width: 1100px;
+            font-family: var(--serif); font-size: clamp(2.4rem, 5.4vw, 5.4rem); font-weight: 400;
+            line-height: 1.03; letter-spacing: -1px;
             opacity: 0; animation: fadeUp 1.1s ease 0.5s forwards;
         }
         .hero-title em { font-style: italic; font-weight: 500; color: var(--accent-brass); }
         .hero-sub {
-            margin-top: 34px; max-width: 480px; font-size: 1.05rem; line-height: 1.7; color: var(--text-dim);
+            margin-top: 34px; max-width: 460px; font-size: 1.05rem; line-height: 1.7; color: var(--text-dim);
             opacity: 0; animation: fadeUp 1.1s ease 0.75s forwards;
         }
-        .hero-actions { margin-top: 46px; display: flex; align-items: center; gap: 30px; opacity: 0; animation: fadeUp 1.1s ease 0.95s forwards; }
+        .hero-actions { margin-top: 46px; display: flex; flex-wrap: wrap; align-items: center; gap: 30px; opacity: 0; animation: fadeUp 1.1s ease 0.95s forwards; }
         .hero-link { font-family: var(--sans); font-size: 0.82rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-warm); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 4px; }
-        .breath-wave { position: absolute; bottom: 40px; right: 60px; width: 220px; height: 44px; opacity: 0.7; }
+
+        .hero-visual { position: relative; opacity: 0; animation: fadeUp 1.2s ease 0.55s forwards; }
+        .hero-frame {
+            width: 100%; aspect-ratio: 4/5; overflow: hidden; position: relative; border: 1px solid var(--line);
+            animation: heroFloat 7s ease-in-out infinite;
+        }
+        .hero-frame img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.95) contrast(1.02); }
+        @keyframes heroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .hero-caption {
+            position: absolute; bottom: -18px; left: -18px; background: var(--bg-panel); border: 1px solid var(--line);
+            padding: 14px 20px; font-family: var(--serif); font-style: italic; font-size: 0.98rem; max-width: 220px; line-height: 1.4;
+        }
+        .breath-wave { position: absolute; top: -34px; right: 6px; width: 130px; height: 26px; opacity: 0.8; }
         .breath-wave path { fill: none; stroke: var(--accent-sage); stroke-width: 1.4; }
-        @media (max-width: 900px) { .breath-wave { display: none; } }
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; padding: 140px 24px 60px 24px; }
+            .hero-visual { order: -1; max-width: 340px; margin: 0 auto 10px; }
+            .hero-caption { display: none; }
+        }
 
         @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* ============ IMAGE BANNER ============ */
-        .banner-section { padding: 0 60px; margin-bottom: 120px; }
-        .banner-frame { width: 100%; height: 62vh; overflow: hidden; position: relative; border: 1px solid var(--line); }
-        .banner-frame img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.95) contrast(1.02); transition: transform 6s cubic-bezier(0.16,1,0.3,1); }
-        .banner-frame:hover img { transform: scale(1.06); }
-        .banner-caption { position: absolute; bottom: 26px; left: 34px; font-family: var(--serif); font-style: italic; font-size: 1.3rem; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
 
         /* ============ SHARED SECTION ============ */
         .section-wrap { padding: 40px 60px 120px 60px; max-width: 1440px; margin: 0 auto; }
@@ -207,6 +216,26 @@
         .pricing-accordion-container.open { max-height: 600px; opacity: 1; margin-top: 20px; }
 
         .format-note { margin-top: 18px; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.5px; color: var(--text-faint); }
+
+        /* ============ PRICE CURVE (signature pricing visual) ============ */
+        .price-curve { margin-top: 46px; padding-top: 36px; border-top: 1px solid var(--line); }
+        .price-curve-label { display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 22px; }
+        .price-curve-bars { display: flex; align-items: flex-end; gap: 14px; height: 150px; }
+        .price-curve-bar {
+            flex: 1; background: var(--bg-panel-2); border: 1px solid var(--line); border-bottom: 3px solid var(--accent-brass);
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 12px;
+            position: relative; transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+        }
+        .price-curve-bar:hover { transform: translateY(-3px); background: var(--bg-panel); }
+        .price-curve-bar.active { background: var(--accent-brass); border-bottom-color: var(--text-warm); }
+        .price-curve-bar.active .price-curve-value,
+        .price-curve-bar.active .price-curve-tag { color: #ffffff; }
+        .price-curve-value { font-family: var(--serif); font-size: 1.15rem; color: var(--text-warm); }
+        .price-curve-tag {
+            position: absolute; bottom: 10px; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 1px;
+            color: var(--text-dim); text-transform: uppercase;
+        }
+        @media (max-width: 600px) { .price-curve-bars { height: 120px; gap: 8px; } .price-curve-value { font-size: 0.9rem; } }
 
         /* ============ CALENDAR & ADMIN SYSTEM ============ */
         .admin-controls {
@@ -280,7 +309,6 @@
         @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
         /* ============ PRICING ============ */
-        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
         .price-card { border: 1px solid var(--line); padding: 34px 26px; background: var(--bg-panel); position: relative; transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; max-width: 480px; }
         .price-card.featured { border-color: var(--accent-brass); box-shadow: 0 10px 30px rgba(184, 141, 67, 0.08); }
         .price-card:hover { transform: translateY(-6px); box-shadow: 0 20px 35px rgba(0,0,0,0.06); }
@@ -330,7 +358,7 @@
             *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
         }
         @media (max-width: 900px) {
-            header, .hero, .section-wrap, .banner-section, .contact-section, footer { padding-left: 24px; padding-right: 24px; }
+            header, .hero, .section-wrap, .contact-section, footer { padding-left: 24px; padding-right: 24px; }
         }
     </style>
 </head>
@@ -357,7 +385,6 @@
                 <a href="#clases" class="interactive">Clases</a>
                 <a href="#horarios" class="interactive">Calendario</a>
                 <a href="#instructora" class="interactive">Instructora</a>
-                <a href="#precios" class="interactive">Precios</a>
             </nav>
             <a href="https://wa.me/50686909330?text=Hola%20Jime,%20me%20gustaría%20agendar%20una%20clase%20de%20Pilates." target="_blank" class="cta-btn interactive">RESERVAR CLASE</a>
         </div>
@@ -365,22 +392,23 @@
 
     <main>
         <section class="hero">
-            <p class="hero-eyebrow">ESTUDIO DE PILATES — REFORMER &amp; MAT</p>
-            <h1 class="hero-title">Mueve tu cuerpo <em>con intención</em>,<br>respira con propósito.</h1>
-            <p class="hero-sub">En Pilates con Jime trabajamos fuerza, control y respiración en sesiones personalizadas a domicilio, sobre reformer y mat, para cuerpos que quieren moverse mejor.</p>
-            <div class="hero-actions">
-                <a href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20más%20información%20para%20una%20clase%20de%20prueba." target="_blank" class="cta-btn interactive">RESERVAR CLASE DE PRUEBA</a>
-                <a href="#clases" class="hero-link interactive">Ver modalidades ↓</a>
+            <div>
+                <p class="hero-eyebrow">ESTUDIO DE PILATES — REFORMER &amp; MAT</p>
+                <h1 class="hero-title">Mueve tu cuerpo <em>con intención</em>,<br>respira con propósito.</h1>
+                <p class="hero-sub">En Pilates con Jime trabajamos fuerza, control y respiración en sesiones personalizadas a domicilio, sobre reformer y mat, para cuerpos que quieren moverse mejor.</p>
+                <div class="hero-actions">
+                    <a href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20más%20información%20para%20una%20clase%20de%20prueba." target="_blank" class="cta-btn interactive">RESERVAR CLASE DE PRUEBA</a>
+                    <a href="#clases" class="hero-link interactive">Ver modalidades ↓</a>
+                </div>
             </div>
-            <svg class="breath-wave" viewBox="0 0 220 44" xmlns="http://www.w3.org/2000/svg">
-                <path id="wave-path" d="M0,22 Q20,4 40,22 T80,22 T120,22 T160,22 T200,22 T240,22" />
-            </svg>
-        </section>
-
-        <section class="banner-section reveal">
-            <div class="banner-frame">
-                <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1600&auto=format&fit=crop" alt="Clase de reformer pilates">
-                <div class="banner-caption">Sesiones personalizadas a domicilio — atención 100% enfocada</div>
+            <div class="hero-visual">
+                <svg class="breath-wave" viewBox="0 0 220 44" xmlns="http://www.w3.org/2000/svg">
+                    <path id="wave-path" d="M0,22 Q20,4 40,22 T80,22 T120,22 T160,22 T200,22 T240,22" />
+                </svg>
+                <div class="hero-frame">
+                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop" alt="Clase de reformer pilates">
+                </div>
+                <p class="hero-caption">Sesiones a domicilio, atención 100% enfocada.</p>
             </div>
         </section>
 
@@ -593,7 +621,18 @@
 
             </div>
 
-            <p class="format-note reveal">¿Prefieres ver la lista completa? Explora también la sección general de <a href="#precios" class="interactive" style="color:var(--accent-brass); border-bottom:1px solid var(--accent-brass);">Precios y Paquetes</a>.</p>
+            <div class="price-curve reveal" aria-hidden="false">
+                <span class="price-curve-label">Precio por persona, según cuántos toman la clase</span>
+                <div class="price-curve-bars">
+                    <div class="price-curve-bar interactive" data-format="individual" onclick="toggleFormatPricing('individual')" style="height:100%"><span class="price-curve-value">$40</span><span class="price-curve-tag">1</span></div>
+                    <div class="price-curve-bar interactive" data-format="duo" onclick="toggleFormatPricing('duo')" style="height:75%"><span class="price-curve-value">$30</span><span class="price-curve-tag">2</span></div>
+                    <div class="price-curve-bar interactive" data-format="trio" onclick="toggleFormatPricing('trio')" style="height:62.5%"><span class="price-curve-value">$25</span><span class="price-curve-tag">3</span></div>
+                    <div class="price-curve-bar interactive" data-format="cuarteto" onclick="toggleFormatPricing('cuarteto')" style="height:50%"><span class="price-curve-value">$20</span><span class="price-curve-tag">4</span></div>
+                    <div class="price-curve-bar interactive" data-format="grupo" onclick="toggleFormatPricing('grupo')" style="height:37.5%"><span class="price-curve-value">$15</span><span class="price-curve-tag">5+</span></div>
+                </div>
+            </div>
+
+            <p class="format-note reveal">Precios de clase suelta, por persona · tipo de cambio aproximado ₡520 = $1 USD.</p>
         </section>
 
         <!-- CALENDARIO INTERACTIVO & PANEL ADMIN -->
@@ -680,185 +719,6 @@
                 <span class="t-quote">"Dejé el dolor de espalda después de años de intentarlo."<span class="t-name">— PAULINA G.</span></span>
                 <span class="sep">✦</span>
             </div>
-        </section>
-
-        <!-- SECCIÓN DE PRECIOS Y CLASES SUELTAS -->
-        <section class="section-wrap" id="precios">
-            <div class="section-header reveal">
-                <div>
-                    <p class="section-eyebrow">Precios</p>
-                    <h2 class="section-title">Elige tu <em>paquete o clase suelta</em></h2>
-                </div>
-                <span class="section-index">PRECIO POR PERSONA</span>
-            </div>
-
-            <p class="format-intro reveal">El precio es <b>por persona</b> y baja entre más gente tome la clase junta. Ahora puedes elegir entre comprar <b>clases sueltas</b> o paquetes mensuales con descuento.</p>
-
-            <div class="pricing-grid reveal">
-
-                <!-- INDIVIDUAL -->
-                <div class="price-card">
-                    <div class="price-name">Individual</div>
-                    <div class="price-people">1 persona</div>
-                    
-                    <div class="package-option single-class">
-                        <div class="package-info">
-                            <span class="package-label" style="color:var(--accent-brass); font-weight:600;">Clase Suelta</span>
-                            <span class="package-price">$40 <small>USD</small></span>
-                            <span class="package-crc">≈ ₡20,800</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20agendar%20una%20Clase%20Suelta%20Individual." target="_blank">Agendar</a>
-                    </div>
-
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">4 clases / mes</span>
-                            <span class="package-price">$140 <small>USD</small></span>
-                            <span class="package-crc">≈ ₡72,800</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20agendar%20el%20paquete%20Individual%20de%204%20clases." target="_blank">Agendar</a>
-                    </div>
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">8 clases / mes</span>
-                            <span class="package-price">$260 <small>USD</small></span>
-                            <span class="package-crc">≈ ₡135,200</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20agendar%20el%20paquete%20Individual%20de%208%20clases." target="_blank">Agendar</a>
-                    </div>
-                </div>
-
-                <!-- DÚO -->
-                <div class="price-card featured">
-                    <div class="price-badge">Más popular</div>
-                    <div class="price-name">Dúo</div>
-                    <div class="price-people">2 personas</div>
-
-                    <div class="package-option single-class">
-                        <div class="package-info">
-                            <span class="package-label" style="color:var(--accent-brass); font-weight:600;">Clase Suelta</span>
-                            <span class="package-price">$30 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡15,600</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20Dúo." target="_blank">Agendar</a>
-                    </div>
-
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">4 clases / mes</span>
-                            <span class="package-price">$100 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡52,000</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Dúo%20de%204%20clases." target="_blank">Agendar</a>
-                    </div>
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">8 clases / mes</span>
-                            <span class="package-price">$185 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡96,200</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Dúo%20de%208%20clases." target="_blank">Agendar</a>
-                    </div>
-                </div>
-
-                <!-- TRÍO -->
-                <div class="price-card">
-                    <div class="price-name">Trío</div>
-                    <div class="price-people">3 personas</div>
-
-                    <div class="package-option single-class">
-                        <div class="package-info">
-                            <span class="package-label" style="color:var(--accent-brass); font-weight:600;">Clase Suelta</span>
-                            <span class="package-price">$25 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡13,000</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20Trío." target="_blank">Agendar</a>
-                    </div>
-
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">4 clases / mes</span>
-                            <span class="package-price">$80 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡41,600</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Trío%20de%204%20clases." target="_blank">Agendar</a>
-                    </div>
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">8 clases / mes</span>
-                            <span class="package-price">$150 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡78,000</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Trío%20de%208%20clases." target="_blank">Agendar</a>
-                    </div>
-                </div>
-
-                <!-- CUARTETO -->
-                <div class="price-card">
-                    <div class="price-name">Cuarteto</div>
-                    <div class="price-people">4 personas</div>
-
-                    <div class="package-option single-class">
-                        <div class="package-info">
-                            <span class="package-label" style="color:var(--accent-brass); font-weight:600;">Clase Suelta</span>
-                            <span class="package-price">$20 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡10,400</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20Cuarteto." target="_blank">Agendar</a>
-                    </div>
-
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">4 clases / mes</span>
-                            <span class="package-price">$65 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡33,800</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Cuarteto%20de%204%20clases." target="_blank">Agendar</a>
-                    </div>
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">8 clases / mes</span>
-                            <span class="package-price">$120 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡62,400</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Cuarteto%20de%208%20clases." target="_blank">Agendar</a>
-                    </div>
-                </div>
-
-                <!-- GRUPO -->
-                <div class="price-card">
-                    <div class="price-name">Grupo</div>
-                    <div class="price-people">5+ personas</div>
-
-                    <div class="package-option single-class">
-                        <div class="package-info">
-                            <span class="package-label" style="color:var(--accent-brass); font-weight:600;">Clase Suelta</span>
-                            <span class="package-price">$15 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡7,800</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20Grupal." target="_blank">Agendar</a>
-                    </div>
-
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">4 clases / mes</span>
-                            <span class="package-price">$50 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡26,000</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Grupo%20de%204%20clases." target="_blank">Agendar</a>
-                    </div>
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">8 clases / mes</span>
-                            <span class="package-price">$95 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡49,400</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Grupo%20de%208%20clases." target="_blank">Agendar</a>
-                    </div>
-                </div>
-
-            </div>
-            <p class="format-note reveal">Precios de referencia por persona. Tipo de cambio aproximado usado: ₡520 = $1 USD.</p>
         </section>
 
         <!-- CONTACTO CON DATOS ACTUALIZADOS -->
@@ -966,11 +826,13 @@
             const container = document.getElementById('pricingAccordion');
             const tags = document.querySelectorAll('.format-grid .format-tag');
             const cards = document.querySelectorAll('.accordion-card');
+            const bars = document.querySelectorAll('.price-curve-bar');
 
             // Si se hace clic en la misma opción activa, la cerramos
             if (activeFormatKey === formatKey) {
                 container.classList.remove('open');
                 tags.forEach(t => t.classList.remove('active'));
+                bars.forEach(b => b.classList.remove('active'));
                 activeFormatKey = null;
                 return;
             }
@@ -986,6 +848,9 @@
                     tag.classList.remove('active');
                 }
             });
+
+            // Reflejar la selección en el gráfico de precio por persona
+            bars.forEach(bar => bar.classList.toggle('active', bar.dataset.format === formatKey));
 
             // Mostrar solo la tarjeta correspondiente
             cards.forEach(card => card.style.display = 'none');
