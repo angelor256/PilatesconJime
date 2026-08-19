@@ -1,993 +1,619 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilates con Jime — Movimiento con Intención</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-void: #f9f6f0;
-            --bg-panel: #ffffff;
-            --bg-panel-2: #f0ebe1;
-            --text-warm: #211d15;
-            --text-dim: #6b6455;
-            --text-faint: #a89f8b;
-            --accent-brass: #b88d43;
-            --accent-clay: #a8543a;
-            --accent-sage: #6e8259;
-            --line: #e2d9c7;
-            --mono: 'IBM Plex Mono', monospace;
-            --serif: 'Fraunces', serif;
-            --sans: 'Work Sans', sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pilates con Jime — Espacio para moverte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbf6f3;
+  --panel:rgba(255,255,255,.6);
+  --panel-solid:#ffffff;
+  --blush:#f3d9d3;
+  --lilac:#ddd4e9;
+  --sage:#d3e0d1;
+  --rose:#c98d8f;
+  --sage-deep:#8fa287;
+  --text:#4c4147;
+  --text-soft:#948a90;
+  --text-faint:#c3b8bd;
+  --line:rgba(76,65,71,.1);
+  --serif:'Cormorant Garamond', serif;
+  --sans:'Jost', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg); color:var(--text); font-family:var(--sans); font-weight:300; overflow-x:hidden;}
+a{color:inherit; text-decoration:none;}
+::selection{background:var(--rose); color:#fff;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--blush); border-radius:4px;}
+:focus-visible{outline:1.5px solid var(--rose); outline-offset:4px;}
+img{display:block; width:100%; height:100%; object-fit:cover;}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+/* ============ PRELOADER — mínimo, sin figuras duras ============ */
+#preloader{position:fixed; inset:0; z-index:10000; background:var(--bg); display:flex; align-items:center; justify-content:center; transition:opacity .8s ease, visibility .8s ease;}
+#preloader.hidden{opacity:0; visibility:hidden; pointer-events:none;}
+.pre-word{font-family:var(--serif); font-style:italic; font-weight:300; font-size:1.6rem; letter-spacing:10px; color:var(--text-soft); opacity:0; animation:preIn 1.6s ease forwards;}
+@keyframes preIn{0%{opacity:0; letter-spacing:22px;} 60%{opacity:1;} 100%{opacity:0; letter-spacing:2px;}}
 
-        @media (hover: none), (pointer: coarse) {
-            * { cursor: auto; }
-            #cursor, #cursor-follower { display: none; }
-        }
+/* ============ ORBES AMBIENTALES ============ */
+.orb{position:absolute; border-radius:50%; filter:blur(70px); pointer-events:none; z-index:0;}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(30px,-24px) scale(1.12);}}
 
-        html { scroll-behavior: smooth; }
+/* ============ SCROLL RAIL — cinta suave ============ */
+.rail{position:fixed; right:26px; top:50%; transform:translateY(-50%); z-index:400; height:min(50vh,420px); display:flex; align-items:center;}
+.rail-track{position:relative; width:1px; height:100%; background:linear-gradient(to bottom, transparent, var(--blush), var(--lilac), var(--rose), transparent);}
+.rail-pearl{position:absolute; left:50%; top:0; width:10px; height:10px; border-radius:50%; background:radial-gradient(circle, #fff 0%, var(--rose) 100%); box-shadow:0 0 12px 3px rgba(201,141,143,.5); transform:translate(-50%,-50%); transition:top .4s cubic-bezier(.16,1,.3,1);}
+.rail-dot{position:absolute; left:50%; top:0; width:6px; height:6px; border-radius:50%; background:var(--panel-solid); border:1px solid var(--text-faint); transform:translate(-50%,-50%); cursor:pointer; transition:all .3s ease;}
+.rail-dot:hover, .rail-dot.active{background:var(--rose); border-color:var(--rose); transform:translate(-50%,-50%) scale(1.6);}
+.rail-dot-label{position:absolute; right:16px; top:50%; transform:translateY(-50%) translateX(4px); font-family:var(--sans); font-size:.66rem; letter-spacing:1.5px; color:var(--text-soft); text-transform:uppercase; white-space:nowrap; opacity:0; transition:opacity .3s ease, transform .3s ease;}
+.rail-dot:hover .rail-dot-label, .rail-dot.active .rail-dot-label{opacity:1; transform:translateY(-50%) translateX(0); color:var(--rose);}
+@media (max-width:900px){.rail{display:none;}}
 
-        body {
-            background-color: var(--bg-void);
-            color: var(--text-warm);
-            font-family: var(--sans);
-            overflow-x: hidden;
-            transition: background-color 0.6s ease, color 0.6s ease;
-        }
+/* ============ HEADER ============ */
+header{position:fixed; top:0; left:0; width:100%; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:30px 56px; transition:padding .4s ease, background .4s ease;}
+header.scrolled{padding:18px 56px; background:rgba(251,246,243,.85); backdrop-filter:blur(14px);}
+.brand{font-family:var(--serif); font-style:italic; font-weight:400; font-size:1.4rem; letter-spacing:.5px;}
+nav{display:flex; gap:34px;}
+nav a{font-size:.78rem; letter-spacing:1.5px; text-transform:uppercase; font-weight:400; opacity:.7; transition:opacity .3s, color .3s;}
+nav a:hover{opacity:1; color:var(--rose);}
+.pill-btn{display:inline-block; background:var(--text); color:var(--bg); padding:12px 26px; border-radius:30px; font-size:.74rem; letter-spacing:1px; text-transform:uppercase; transition:transform .35s cubic-bezier(.34,1.56,.64,1), background .3s ease, box-shadow .3s ease;}
+.pill-btn:hover{background:var(--rose); transform:translateY(-2px); box-shadow:0 10px 22px rgba(201,141,143,.35);}
+.pill-btn.outline{background:transparent; color:var(--text); border:1px solid var(--text-faint);}
+.pill-btn.outline:hover{background:var(--panel-solid); border-color:var(--rose); color:var(--rose);}
+@media (max-width:900px){nav{display:none;} header{padding:20px 24px;}}
 
-        ::selection { background: var(--accent-clay); color: #ffffff; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-void); }
-        ::-webkit-scrollbar-thumb { background: var(--accent-brass); }
+/* ============ HERO ============ */
+.hero{min-height:100vh; display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:50px; padding:150px 56px 90px 56px; position:relative;}
+.hero-eyebrow{font-size:.78rem; letter-spacing:3px; text-transform:uppercase; color:var(--sage-deep); margin-bottom:26px; opacity:0; animation:riseIn 1s ease .2s forwards;}
+.hero-title{font-family:var(--serif); font-weight:300; font-size:clamp(2.5rem,5.6vw,4.9rem); line-height:1.12; letter-spacing:-.5px; opacity:0; animation:riseIn 1.1s ease .4s forwards;}
+.hero-title em{font-style:italic; font-weight:500; color:var(--rose);}
+.hero-sub{margin-top:30px; max-width:430px; font-size:1.05rem; line-height:1.8; color:var(--text-soft); opacity:0; animation:riseIn 1.1s ease .65s forwards;}
+.hero-actions{margin-top:42px; display:flex; flex-wrap:wrap; align-items:center; gap:24px; opacity:0; animation:riseIn 1.1s ease .9s forwards;}
+.text-link{font-size:.85rem; letter-spacing:.5px; border-bottom:1px solid var(--text-faint); padding-bottom:3px; transition:border-color .3s, color .3s;}
+.text-link:hover{border-color:var(--rose); color:var(--rose);}
+@keyframes riseIn{from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);}}
 
-        /* ============ PRELOADER — BREATH CIRCLE ============ */
-        #preloader {
-            position: fixed; inset: 0; z-index: 10000;
-            background: var(--bg-void);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px;
-            transition: opacity 0.9s ease, visibility 0.9s ease;
-        }
-        #preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        .breath-circle {
-            width: 90px; height: 90px; border-radius: 50%;
-            border: 1px solid var(--accent-brass);
-            animation: breathe 3.6s ease-in-out infinite;
-        }
-        @keyframes breathe {
-            0%, 100% { transform: scale(0.7); opacity: 0.4; }
-            50% { transform: scale(1.15); opacity: 1; }
-        }
-        .breath-word {
-            font-family: var(--mono); font-size: 0.62rem; letter-spacing: 4px; color: var(--text-dim);
-            text-transform: uppercase;
-        }
+.hero-visual{position:relative; display:flex; justify-content:center; opacity:0; animation:riseIn 1.2s ease .5s forwards;}
+.blob-frame{
+  width:82%; max-width:380px; aspect-ratio:4/5; overflow:hidden;
+  border-radius:42% 58% 63% 37% / 45% 40% 60% 55%;
+  animation:blobMorph 12s ease-in-out infinite, blobFloat 8s ease-in-out infinite;
+  box-shadow:0 30px 60px -20px rgba(76,65,71,.25);
+}
+@keyframes blobMorph{0%,100%{border-radius:42% 58% 63% 37% / 45% 40% 60% 55%;} 50%{border-radius:58% 42% 40% 60% / 55% 60% 40% 45%;}}
+@keyframes blobFloat{0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);}}
+.hero-visual .orb{width:200px; height:200px;}
+@media (max-width:900px){.hero{grid-template-columns:1fr; padding:130px 24px 60px 24px;} .hero-visual{order:-1; margin-bottom:6px;}}
 
-        /* ============ SPRING TENSION RAIL ============ */
-        .tension-rail {
-            position: fixed; right: 26px; top: 50%; transform: translateY(-50%);
-            z-index: 500; display: flex; flex-direction: column; align-items: center; gap: 14px;
-            pointer-events: none;
-        }
-        .tension-track {
-            width: 1px; height: 220px; background: var(--line); position: relative;
-        }
-        .tension-dot {
-            position: absolute; left: 50%; top: 0; width: 7px; height: 7px; border-radius: 50%;
-            background: var(--accent-brass); transform: translate(-50%, 0);
-            transition: top 0.3s ease;
-        }
-        .tension-label {
-            font-family: var(--mono); font-size: 0.58rem; letter-spacing: 3px; color: var(--text-dim);
-            writing-mode: vertical-rl; text-transform: uppercase;
-        }
-        @media (max-width: 900px) { .tension-rail { display: none; } }
+/* ============ PÁGINA GENÉRICA ============ */
+.section{padding:110px 56px; max-width:1240px; margin:0 auto; position:relative; scroll-margin-top:100px;}
+.section-head{margin-bottom:56px; max-width:640px;}
+.eyebrow{font-size:.78rem; letter-spacing:3px; text-transform:uppercase; color:var(--sage-deep); margin-bottom:14px;}
+.section-title{font-family:var(--serif); font-weight:300; font-size:clamp(1.9rem,3.3vw,3rem); line-height:1.2;}
+.section-title em{font-style:italic; color:var(--rose); font-weight:500;}
+.reveal{opacity:0; transform:translateY(24px); transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1; transform:translateY(0);}
+@media (max-width:900px){.section{padding:80px 24px;}}
 
-        /* ============ CURSOR ============ */
-        #cursor {
-            position: fixed; width: 8px; height: 8px; background: var(--accent-brass);
-            border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
-            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
-        }
-        #cursor-follower {
-            position: fixed; width: 38px; height: 38px;
-            border: 1px solid rgba(184, 141, 67, 0.4); border-radius: 50%;
-            pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
-            transition: transform 0.2s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
-        }
-        body.hovered #cursor { width: 4px; height: 4px; }
-        body.hovered #cursor-follower { width: 64px; height: 64px; border-color: var(--accent-brass); }
+/* ============ MÉTODO ============ */
+.light-sweep{
+  font-family:var(--serif); font-style:italic; font-weight:400; font-size:clamp(1.3rem,2.4vw,1.85rem); line-height:1.65;
+  max-width:800px; margin-bottom:64px;
+  background-image:linear-gradient(100deg, var(--text-faint) 0%, var(--text-faint) 42%, var(--rose) 50%, var(--text-faint) 58%, var(--text-faint) 100%);
+  background-size:280% 100%; background-position:100% 0;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.principles-flow{position:relative;}
+.principles-line{position:absolute; top:34px; left:5%; right:5%; height:1px; background:var(--line); z-index:0;}
+.principles-row{display:grid; grid-template-columns:repeat(6,1fr); gap:20px; position:relative; z-index:1;}
+.principle{display:flex; flex-direction:column; align-items:flex-start; gap:14px;}
+.principle-dot{width:12px; height:12px; border-radius:50%; background:var(--panel-solid); border:1px solid var(--rose); margin-top:28px;}
+.principle-title{font-family:var(--serif); font-size:1.25rem; font-style:italic;}
+.principle-text{font-size:.86rem; line-height:1.65; color:var(--text-soft);}
+@media (max-width:900px){.principles-row{grid-template-columns:1fr 1fr; gap:34px;} .principles-line{display:none;}}
+@media (max-width:560px){.principles-row{grid-template-columns:1fr;}}
 
-        /* ============ HEADER ============ */
-        header {
-            position: fixed; top: 0; left: 0; width: 100%; padding: 32px 60px;
-            display: flex; justify-content: space-between; align-items: center; z-index: 100;
-            transition: padding 0.4s ease, background-color 0.4s ease, backdrop-filter 0.4s ease;
-        }
-        header.scrolled {
-            padding: 18px 60px; background: rgba(249, 246, 240, 0.9); backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--line);
-        }
-        .brand-logo { font-family: var(--serif); font-size: 1.35rem; letter-spacing: 1px; font-style: italic; font-weight: 500; }
-        .nav-right { display: flex; align-items: center; gap: 34px; }
-        nav { display: flex; gap: 30px; }
-        nav a {
-            color: var(--text-warm); text-decoration: none; font-size: 0.78rem; letter-spacing: 1.5px;
-            text-transform: uppercase; transition: opacity 0.3s; font-family: var(--sans); font-weight: 500;
-        }
-        nav a:hover { opacity: 0.55; }
-        .cta-btn {
-            background: var(--accent-clay); color: #ffffff; border: none; padding: 12px 24px;
-            font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
-            font-family: var(--sans); transition: background 0.3s, transform 0.3s; text-decoration: none;
-        }
-        .cta-btn:hover { background: var(--accent-brass); transform: translateY(-2px); }
-        @media (max-width: 900px) { nav { display: none; } }
+/* ============ CLASES ============ */
+.format-intro{max-width:620px; color:var(--text-soft); line-height:1.8; margin-bottom:40px;}
+.format-intro b{color:var(--text); font-weight:500;}
+.pill-tabs{display:flex; flex-wrap:wrap; gap:12px; margin-bottom:10px;}
+.pill-tab{font-family:var(--serif); font-style:italic; font-size:1.05rem; padding:13px 24px; border-radius:30px; background:var(--panel-solid); border:1px solid var(--line); cursor:pointer; display:flex; align-items:baseline; gap:8px; transition:all .35s cubic-bezier(.34,1.2,.64,1);}
+.pill-tab span{font-family:var(--sans); font-size:.62rem; letter-spacing:1px; color:var(--text-soft); text-transform:uppercase; font-style:normal;}
+.pill-tab:hover{transform:translateY(-3px); box-shadow:0 12px 24px -10px rgba(76,65,71,.2);}
+.pill-tab.active{background:var(--text); color:var(--bg); border-color:var(--text);}
+.pill-tab.active span{color:var(--blush);}
 
-        /* ============ HERO ============ */
-        .hero {
-            min-height: 100vh; width: 100%; display: grid; grid-template-columns: 1.15fr 0.85fr; align-items: center;
-            gap: 60px; padding: 150px 60px 90px 60px; position: relative;
-        }
-        .hero-eyebrow {
-            font-family: var(--mono); font-size: 0.68rem; letter-spacing: 4px; color: var(--accent-sage);
-            text-transform: uppercase; margin-bottom: 30px; opacity: 0; animation: fadeUp 1s ease 0.3s forwards;
-        }
-        .hero-title {
-            font-family: var(--serif); font-size: clamp(2.4rem, 5.4vw, 5.4rem); font-weight: 400;
-            line-height: 1.03; letter-spacing: -1px;
-            opacity: 0; animation: fadeUp 1.1s ease 0.5s forwards;
-        }
-        .hero-title em { font-style: italic; font-weight: 500; color: var(--accent-brass); }
-        .hero-sub {
-            margin-top: 34px; max-width: 460px; font-size: 1.05rem; line-height: 1.7; color: var(--text-dim);
-            opacity: 0; animation: fadeUp 1.1s ease 0.75s forwards;
-        }
-        .hero-actions { margin-top: 46px; display: flex; flex-wrap: wrap; align-items: center; gap: 30px; opacity: 0; animation: fadeUp 1.1s ease 0.95s forwards; }
-        .hero-link { font-family: var(--sans); font-size: 0.82rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-warm); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 4px; }
+.glass-slot{max-height:0; overflow:hidden; opacity:0; transition:max-height .55s cubic-bezier(.16,1,.3,1), opacity .4s ease, margin-top .4s ease; margin-top:0;}
+.glass-slot.open{max-height:600px; opacity:1; margin-top:32px;}
+.glass-card{background:var(--panel); backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,.6); border-radius:26px; padding:34px 34px; max-width:460px; box-shadow:0 20px 50px -25px rgba(76,65,71,.25);}
+.glass-name{font-family:var(--serif); font-style:italic; font-size:1.6rem;}
+.glass-people{font-size:.7rem; letter-spacing:1.5px; color:var(--sage-deep); text-transform:uppercase; margin-bottom:22px;}
+.price-row{padding:16px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:12px;}
+.price-row.single{background:rgba(201,141,143,.08); margin:0 -34px; padding:16px 34px; border-radius:16px; border-top:none;}
+.price-info{display:flex; flex-direction:column; gap:2px;}
+.price-label{font-size:.66rem; letter-spacing:1px; color:var(--text-soft); text-transform:uppercase;}
+.price-amount{font-family:var(--serif); font-style:italic; font-size:1.5rem;}
+.price-amount small{font-family:var(--sans); font-size:.66rem; color:var(--text-soft); font-style:normal;}
+.price-crc{font-size:.68rem; color:var(--text-soft);}
+.book-link{flex-shrink:0; padding:9px 18px; border-radius:20px; background:var(--text); color:var(--bg); font-size:.68rem; letter-spacing:.5px; text-transform:uppercase; transition:background .3s, transform .3s;}
+.book-link:hover{background:var(--rose); transform:translateY(-2px);}
 
-        .hero-visual { position: relative; opacity: 0; animation: fadeUp 1.2s ease 0.55s forwards; }
-        .hero-frame {
-            width: 100%; aspect-ratio: 4/5; overflow: hidden; position: relative; border: 1px solid var(--line);
-            animation: heroFloat 7s ease-in-out infinite;
-        }
-        .hero-frame img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.95) contrast(1.02); }
-        @keyframes heroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .hero-caption {
-            position: absolute; bottom: -18px; left: -18px; background: var(--bg-panel); border: 1px solid var(--line);
-            padding: 14px 20px; font-family: var(--serif); font-style: italic; font-size: 0.98rem; max-width: 220px; line-height: 1.4;
-        }
-        .breath-wave { position: absolute; top: -34px; right: 6px; width: 130px; height: 26px; opacity: 0.8; }
-        .breath-wave path { fill: none; stroke: var(--accent-sage); stroke-width: 1.4; }
-        @media (max-width: 900px) {
-            .hero { grid-template-columns: 1fr; padding: 140px 24px 60px 24px; }
-            .hero-visual { order: -1; max-width: 340px; margin: 0 auto 10px; }
-            .hero-caption { display: none; }
-        }
+.gradient-chart{margin-top:56px; padding-top:36px; border-top:1px solid var(--line);}
+.gradient-chart-label{font-size:.72rem; letter-spacing:1.5px; color:var(--text-soft); text-transform:uppercase; margin-bottom:22px; display:block;}
+.gradient-bars{display:flex; align-items:flex-end; gap:14px; height:140px;}
+.gbar{flex:1; border-radius:16px 16px 6px 6px; background:linear-gradient(180deg, var(--blush), var(--rose)); opacity:.55; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:12px; position:relative; cursor:pointer; transition:opacity .3s ease, transform .3s ease;}
+.gbar:hover, .gbar.active{opacity:1; transform:translateY(-4px);}
+.gbar-val{font-family:var(--serif); font-style:italic; font-size:1.15rem; color:#fff;}
+.gbar-tag{position:absolute; bottom:8px; font-size:.62rem; color:rgba(255,255,255,.85);}
+@media (max-width:600px){.gradient-bars{height:110px;}}
 
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+/* ============ CALENDARIO ============ */
+.admin-row{display:flex; justify-content:flex-end; margin-bottom:20px;}
+.admin-link{font-size:.72rem; letter-spacing:.5px; color:var(--text-faint); border-bottom:1px dotted var(--text-faint); cursor:pointer; background:none; border-top:none; border-left:none; border-right:none; padding:2px 0; font-family:var(--sans);}
+.admin-link:hover{color:var(--rose); border-color:var(--rose);}
+.admin-panel{background:var(--panel); backdrop-filter:blur(14px); border-radius:22px; padding:26px; margin-bottom:30px; display:none; border:1px solid rgba(255,255,255,.6);}
+.admin-panel.active{display:block;}
+.admin-panel h3{font-family:var(--serif); font-style:italic; font-size:1.2rem; margin-bottom:16px; color:var(--rose);}
+.admin-form{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px; align-items:flex-end;}
+.form-group{display:flex; flex-direction:column; gap:6px;}
+.form-group label{font-size:.66rem; color:var(--text-soft); text-transform:uppercase; letter-spacing:1px;}
+.form-group input{padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--panel-solid); font-family:var(--sans); font-size:.85rem; color:var(--text);}
+.admin-save{background:var(--text); color:var(--bg); border:none; padding:11px 20px; border-radius:20px; font-size:.7rem; letter-spacing:1px; text-transform:uppercase; cursor:pointer;}
+.cal-nav{display:flex; justify-content:space-between; align-items:center; margin-bottom:22px;}
+.cal-month{font-family:var(--serif); font-style:italic; font-size:1.5rem; text-transform:capitalize;}
+.cal-btn{background:var(--panel-solid); border:1px solid var(--line); border-radius:20px; padding:8px 16px; font-size:.78rem; cursor:pointer;}
+.cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:8px;}
+.cal-name{text-align:center; font-size:.66rem; letter-spacing:1px; color:var(--sage-deep); text-transform:uppercase; padding-bottom:6px;}
+.cal-cell{background:var(--panel-solid); border-radius:14px; min-height:96px; padding:10px; display:flex; flex-direction:column; justify-content:space-between; border:1px solid var(--line);}
+.cal-cell.empty{background:transparent; border:none;}
+.cal-num{font-size:.8rem; color:var(--text);}
+.cal-badge{display:block; padding:4px 8px; border-radius:10px; font-size:.6rem; margin-top:4px;}
+.st-ok{background:rgba(143,162,135,.18); color:var(--sage-deep);}
+.st-low{background:rgba(201,141,143,.18); color:var(--rose);}
+.st-full{background:rgba(76,65,71,.12); color:var(--text-soft);}
+@media (max-width:768px){.cal-grid{grid-template-columns:1fr;} .cal-name{display:none;} .cal-cell.empty{display:none;}}
 
-        /* ============ SHARED SECTION ============ */
-        .section-wrap { padding: 40px 60px 120px 60px; max-width: 1440px; margin: 0 auto; }
-        .section-header { margin-bottom: 50px; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--line); padding-bottom: 22px; }
-        .section-eyebrow { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 3px; color: var(--accent-sage); text-transform: uppercase; margin-bottom: 12px; }
-        .section-title { font-family: var(--serif); font-size: clamp(1.7rem, 2.6vw, 2.6rem); font-weight: 400; }
-        .section-title em { font-style: italic; color: var(--accent-brass); }
-        .section-index { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 2px; color: var(--text-dim); }
+/* ============ INSTRUCTORA ============ */
+.instructor-grid{display:grid; grid-template-columns:.8fr 1.2fr; gap:70px; align-items:center;}
+.blob-frame.small{width:100%; max-width:320px; margin:0 auto; animation:blobMorph 14s ease-in-out infinite, blobFloat 9s ease-in-out infinite;}
+.instructor-quote{font-family:var(--serif); font-style:italic; font-weight:300; font-size:clamp(1.5rem,2.4vw,2.1rem); line-height:1.5; margin-bottom:34px;}
+.instructor-quote em{color:var(--rose); font-weight:500;}
+.chip-row{display:flex; flex-wrap:wrap; gap:12px;}
+.chip{background:var(--panel-solid); border:1px solid var(--line); border-radius:30px; padding:10px 20px; font-size:.82rem; display:flex; align-items:baseline; gap:8px;}
+.chip b{font-family:var(--serif); font-style:italic; color:var(--rose); font-weight:500;}
+.chip span{font-size:.64rem; color:var(--text-soft); text-transform:uppercase; letter-spacing:.5px;}
+@media (max-width:900px){.instructor-grid{grid-template-columns:1fr; gap:44px;}}
 
-        .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
-        .reveal.in { opacity: 1; transform: translateY(0); }
+/* ============ TESTIMONIOS ============ */
+.quote-belt{overflow:hidden; padding:20px 0; mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent); -webkit-mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);}
+.quote-track{display:inline-flex; gap:24px; animation:beltScroll 32s linear infinite;}
+.quote-card{display:inline-block; width:280px; background:var(--panel); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.6); border-radius:24px; padding:26px; vertical-align:top; white-space:normal; box-shadow:0 16px 34px -22px rgba(76,65,71,.25);}
+.quote-card p{font-family:var(--serif); font-style:italic; font-size:1.15rem; line-height:1.5; color:var(--text);}
+.quote-card .who{display:block; margin-top:14px; font-size:.68rem; letter-spacing:1px; color:var(--rose); text-transform:uppercase;}
+@keyframes beltScroll{from{transform:translateX(0);} to{transform:translateX(-50%);}}
 
-        /* ============ SIX PRINCIPLES ============ */
-        .principles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
-        .principle-card { background: var(--bg-panel); padding: 46px 38px; transition: background 0.4s ease; }
-        .principle-card:hover { background: var(--bg-panel-2); }
-        .principle-num { font-family: var(--mono); font-size: 0.7rem; color: var(--accent-clay); letter-spacing: 2px; margin-bottom: 22px; }
-        .principle-title { font-family: var(--serif); font-size: 1.35rem; margin-bottom: 14px; }
-        .principle-text { font-size: 0.9rem; line-height: 1.65; color: var(--text-dim); }
-        @media (max-width: 900px) { .principles-grid { grid-template-columns: 1fr; } }
+/* ============ CIERRE ============ */
+.finale{padding:130px 56px; position:relative; overflow:hidden;}
+.finale-grid{max-width:1240px; margin:0 auto; display:grid; grid-template-columns:1.1fr .9fr; gap:60px; align-items:center; position:relative; z-index:1;}
+.finale-title{font-family:var(--serif); font-weight:300; font-size:clamp(2.5rem,5.6vw,4.6rem); line-height:1.08; margin-bottom:26px;}
+.finale-title em{font-style:italic; color:var(--rose); font-weight:500;}
+.finale-sub{color:var(--text-soft); line-height:1.8; margin-bottom:34px; max-width:440px;}
+.contact-rows{display:grid; grid-template-columns:repeat(2,1fr); gap:24px; margin-top:40px;}
+.contact-rows .spec{font-size:.66rem; letter-spacing:1px; color:var(--text-soft); text-transform:uppercase; margin-bottom:6px;}
+.contact-rows a, .contact-rows .val{font-family:var(--serif); font-style:italic; font-size:1.05rem;}
+.contact-rows a{border-bottom:1px solid transparent; transition:border-color .3s, color .3s;}
+.contact-rows a:hover{border-color:var(--rose); color:var(--rose);}
+.finale-visual{position:relative; display:flex; justify-content:center;}
+.finale-visual .blob-frame{max-width:300px;}
+@media (max-width:900px){.finale-grid{grid-template-columns:1fr; gap:40px;} .finale-visual{order:-1;}}
 
-        /* ============ CLASSES ============ */
-        .format-intro { max-width: 680px; color: var(--text-dim); font-size: 0.98rem; line-height: 1.75; margin-bottom: 40px; }
-        .format-intro b { color: var(--text-warm); font-weight: 500; }
-        .format-hero { margin-bottom: 30px; }
-        .format-hero-eyebrow { display: block; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 3px; color: var(--accent-sage); text-transform: uppercase; margin-bottom: 10px; }
-        .format-hero-title { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: clamp(3rem, 7vw, 5.5rem); line-height: 0.9; color: var(--text-warm); }
-        .format-hero-sub { margin-top: 16px; font-size: 1rem; color: var(--text-dim); }
-        .format-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 30px; }
-        .format-tag {
-            font-family: var(--serif); font-size: 1.02rem; color: var(--text-warm);
-            border: 1px solid var(--line); background: var(--bg-panel); padding: 14px 22px; display: flex; align-items: baseline; gap: 10px;
-            user-select: none; transition: all 0.3s ease;
-        }
-        .format-tag span { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 1px; color: var(--accent-sage); text-transform: uppercase; transition: color 0.3s ease; }
-        .format-tag:hover { border-color: var(--accent-brass); transform: translateY(-2px); }
-        .format-tag.active { background: var(--accent-brass); color: #ffffff; border-color: var(--accent-brass); }
-        .format-tag.active span { color: rgba(255, 255, 255, 0.85); }
-        
-        .pricing-accordion-container {
-            max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, margin-top 0.4s ease; margin-top: 0;
-        }
-        .pricing-accordion-container.open { max-height: 600px; opacity: 1; margin-top: 20px; }
+/* ============ FOOTER ============ */
+footer{padding:60px 56px 40px; text-align:center;}
+.foot-brand{font-family:var(--serif); font-style:italic; font-size:1.5rem; margin-bottom:20px;}
+.foot-links{display:flex; justify-content:center; gap:30px; font-size:.74rem; letter-spacing:1px; text-transform:uppercase; color:var(--text-soft); margin-bottom:22px;}
+.foot-links a:hover{color:var(--rose);}
+.foot-credit{font-size:.66rem; letter-spacing:.5px; color:var(--text-faint);}
 
-        .format-note { margin-top: 18px; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.5px; color: var(--text-faint); }
+/* ============ CTA FLOTANTE ============ */
+.float-cta{position:fixed; bottom:28px; right:28px; z-index:400; width:56px; height:56px; border-radius:50%; background:var(--text); display:flex; align-items:center; justify-content:center; box-shadow:0 14px 30px -12px rgba(76,65,71,.4); opacity:0; transform:translateY(16px) scale(.85); pointer-events:none; transition:opacity .4s ease, transform .4s ease, background .3s ease;}
+.float-cta.visible{opacity:1; transform:translateY(0) scale(1); pointer-events:auto;}
+.float-cta:hover{background:var(--rose);}
+.float-cta svg{width:22px; height:22px; stroke:var(--bg); fill:none; stroke-width:1.5;}
+.float-label{position:absolute; right:66px; top:50%; transform:translateY(-50%) translateX(6px); background:var(--panel-solid); color:var(--text); font-size:.68rem; letter-spacing:.5px; padding:8px 14px; border-radius:16px; white-space:nowrap; opacity:0; box-shadow:0 8px 20px -10px rgba(76,65,71,.3); transition:opacity .3s ease, transform .3s ease; pointer-events:none;}
+.float-cta:hover .float-label{opacity:1; transform:translateY(-50%) translateX(0);}
+@media (max-width:900px){.float-cta{width:50px; height:50px; bottom:18px; right:18px;} .float-label{display:none;}}
 
-        /* ============ PRICE CURVE (signature pricing visual) ============ */
-        .price-curve { margin-top: 46px; padding-top: 36px; border-top: 1px solid var(--line); }
-        .price-curve-label { display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 22px; }
-        .price-curve-bars { display: flex; align-items: flex-end; gap: 14px; height: 150px; }
-        .price-curve-bar {
-            flex: 1; background: var(--bg-panel-2); border: 1px solid var(--line); border-bottom: 3px solid var(--accent-brass);
-            display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 12px;
-            position: relative; transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
-        }
-        .price-curve-bar:hover { transform: translateY(-3px); background: var(--bg-panel); }
-        .price-curve-bar.active { background: var(--accent-brass); border-bottom-color: var(--text-warm); }
-        .price-curve-bar.active .price-curve-value,
-        .price-curve-bar.active .price-curve-tag { color: #ffffff; }
-        .price-curve-value { font-family: var(--serif); font-size: 1.15rem; color: var(--text-warm); }
-        .price-curve-tag {
-            position: absolute; bottom: 10px; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 1px;
-            color: var(--text-dim); text-transform: uppercase;
-        }
-        @media (max-width: 600px) { .price-curve-bars { height: 120px; gap: 8px; } .price-curve-value { font-size: 0.9rem; } }
-
-        /* ============ CALENDAR & ADMIN SYSTEM ============ */
-        .admin-controls {
-            background: var(--bg-panel-2); border: 1px solid var(--line); padding: 24px; margin-bottom: 30px;
-            display: none; transition: all 0.3s ease;
-        }
-        .admin-controls.active { display: block; }
-        .admin-title { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 15px; color: var(--accent-clay); display: flex; justify-content: space-between; align-items: center; }
-        .admin-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; align-items: flex-end; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group label { font-family: var(--mono); font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
-        .form-group input, .form-group select {
-            padding: 10px; border: 1px solid var(--line); background: var(--bg-panel); font-family: var(--sans); font-size: 0.88rem; color: var(--text-warm); outline: none;
-        }
-        .admin-btn {
-            background: var(--accent-brass); color: #fff; border: none; padding: 12px 20px; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: background 0.3s;
-        }
-        .admin-btn:hover { background: var(--text-warm); }
-        .toggle-admin-btn {
-            background: transparent; border: 1px solid var(--line); padding: 6px 14px; font-family: var(--mono); font-size: 0.62rem; color: var(--text-dim); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px; cursor: pointer; transition: all 0.3s;
-        }
-        .toggle-admin-btn:hover { border-color: var(--accent-brass); color: var(--accent-brass); }
-
-        .calendar-header-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .calendar-month-title { font-family: var(--serif); font-size: 1.5rem; text-transform: capitalize; }
-        .cal-nav-btn { background: var(--bg-panel); border: 1px solid var(--line); padding: 8px 16px; font-family: var(--mono); font-size: 0.8rem; cursor: pointer; }
-        
-        .calendar-grid {
-            display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line);
-        }
-        .cal-day-name {
-            background: var(--bg-panel-2); padding: 12px; text-align: center; font-family: var(--mono); font-size: 0.65rem; color: var(--accent-sage); text-transform: uppercase; letter-spacing: 1px;
-        }
-        .cal-day-cell {
-            background: var(--bg-panel); min-height: 110px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: background 0.2s;
-        }
-        .cal-day-cell.empty { background: var(--bg-void); opacity: 0.5; }
-        .cal-day-number { font-family: var(--mono); font-size: 0.8rem; font-weight: 500; color: var(--text-warm); }
-        .cal-slots-info { margin-top: 8px; font-size: 0.72rem; }
-        .slot-badge {
-            display: block; padding: 4px 6px; border-radius: 2px; font-family: var(--mono); font-size: 0.6rem; margin-top: 4px; line-height: 1.2;
-        }
-        .status-available { background: rgba(110, 130, 89, 0.15); color: var(--accent-sage); border: 1px solid var(--accent-sage); }
-        .status-limited { background: rgba(184, 141, 67, 0.15); color: var(--accent-brass); border: 1px solid var(--accent-brass); }
-        .status-full { background: rgba(168, 84, 58, 0.15); color: var(--accent-clay); border: 1px solid var(--accent-clay); }
-        
-        @media (max-width: 768px) {
-            .calendar-grid { grid-template-columns: repeat(1, 1fr); }
-            .cal-day-name { display: none; }
-            .cal-day-cell.empty { display: none; }
-            .cal-day-cell { min-height: auto; padding: 14px; border-bottom: 1px solid var(--line); }
-        }
-
-        /* ============ INSTRUCTOR ============ */
-        .instructor-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 90px; align-items: center; }
-        .instructor-image { aspect-ratio: 4/5; overflow: hidden; border: 1px solid var(--line); }
-        .instructor-image img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.9); }
-        .instructor-quote { font-family: var(--serif); font-style: italic; font-size: clamp(1.4rem, 2.2vw, 2rem); line-height: 1.5; margin-bottom: 34px; }
-        .instructor-quote span { color: var(--accent-brass); }
-        .credentials-list { display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--line); padding-top: 26px; }
-        .credential-row { display: flex; justify-content: space-between; font-size: 0.88rem; color: var(--text-dim); }
-        .credential-row b { color: var(--text-warm); font-weight: 500; }
-        @media (max-width: 900px) { .instructor-grid { grid-template-columns: 1fr; gap: 46px; } }
-
-        /* ============ TESTIMONIALS MARQUEE ============ */
-        .marquee-section { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 40px 0; overflow: hidden; white-space: nowrap; background: var(--bg-panel); }
-        .marquee-track { display: inline-flex; gap: 70px; animation: marquee 40s linear infinite; }
-        .marquee-track .t-quote { font-family: var(--serif); font-style: italic; font-size: 1.15rem; color: var(--text-dim); }
-        .marquee-track .t-name { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px; color: var(--accent-brass); margin-left: 14px; }
-        .marquee-track .sep { color: var(--text-faint); margin: 0 20px; }
-        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-        /* ============ PRICING ============ */
-        .price-card { border: 1px solid var(--line); padding: 34px 26px; background: var(--bg-panel); position: relative; transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; max-width: 480px; }
-        .price-card.featured { border-color: var(--accent-brass); box-shadow: 0 10px 30px rgba(184, 141, 67, 0.08); }
-        .price-card:hover { transform: translateY(-6px); box-shadow: 0 20px 35px rgba(0,0,0,0.06); }
-        .price-badge { position: absolute; top: -1px; right: -1px; background: var(--accent-clay); color: #ffffff; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 2px; padding: 6px 12px; text-transform: uppercase; }
-        .price-name { font-family: var(--serif); font-size: 1.5rem; margin-bottom: 4px; }
-        .price-people { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 2px; color: var(--accent-sage); text-transform: uppercase; margin-bottom: 24px; }
-        
-        .package-option { padding: 16px 0; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-        .package-option.single-class { background: rgba(184, 141, 67, 0.04); margin: 0 -26px; padding: 16px 26px; border-bottom: 1px solid var(--line); }
-        .package-info { display: flex; flex-direction: column; gap: 2px; }
-        .package-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 1.5px; color: var(--text-dim); text-transform: uppercase; }
-        .package-price { font-family: var(--serif); font-size: 1.35rem; color: var(--text-warm); }
-        .package-price small { font-family: var(--sans); font-size: 0.7rem; color: var(--text-dim); margin-left: 2px; }
-        .package-crc { font-family: var(--sans); font-size: 0.7rem; color: var(--text-dim); }
-        .package-btn {
-            flex-shrink: 0; display: inline-block; padding: 8px 14px; font-family: var(--sans);
-            font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
-            color: var(--text-warm); border: 1px solid var(--accent-brass); text-decoration: none;
-            transition: all 0.3s ease; text-align: center;
-        }
-        .package-btn:hover { background: var(--accent-brass); color: #ffffff; }
-        @media (max-width: 500px) { .package-option { flex-direction: column; align-items: flex-start; } .package-btn { width: 100%; text-align: center; } }
-
-        /* ============ CONTACT ============ */
-        .contact-section { padding: 110px 60px; }
-        .contact-grid { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 90px; align-items: center; }
-        .contact-title { font-family: var(--serif); font-size: clamp(1.8rem, 3.4vw, 3rem); margin-bottom: 24px; }
-        .contact-title em { font-style: italic; color: var(--accent-brass); }
-        .contact-sub { color: var(--text-dim); line-height: 1.7; margin-bottom: 40px; max-width: 460px; }
-        .contact-rows { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; }
-        .contact-rows .spec-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; }
-        .contact-rows a, .contact-rows span.val { font-family: var(--serif); font-size: 1.05rem; color: var(--text-warm); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.3s; }
-        .contact-rows a:hover { border-color: var(--accent-brass); color: var(--accent-brass); }
-        .contact-map { aspect-ratio: 1/1; border: 1px solid var(--line); overflow: hidden; }
-        .contact-map img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.9); }
-        @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; gap: 50px; } }
-
-        /* ============ FOOTER ============ */
-        footer { padding: 80px 60px 40px 60px; text-align: center; border-top: 1px solid var(--line); background: var(--bg-panel); }
-        .footer-brand { font-family: var(--serif); font-style: italic; font-size: 1.6rem; margin-bottom: 26px; }
-        .footer-links { display: flex; justify-content: center; gap: 36px; font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 30px; }
-        .footer-links a { color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
-        .footer-links a:hover { color: var(--accent-brass); }
-        .footer-credit { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 2px; color: var(--text-faint); }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
-        }
-        @media (max-width: 900px) {
-            header, .hero, .section-wrap, .contact-section, footer { padding-left: 24px; padding-right: 24px; }
-        }
-    </style>
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}}
+</style>
 </head>
 <body>
 
-    <div id="preloader">
-        <div class="breath-circle"></div>
-        <div class="breath-word" id="breath-word">INHALA</div>
+<div id="preloader"><p class="pre-word">respirar</p></div>
+
+<div class="rail">
+  <div class="rail-track" id="railTrack"><div class="rail-pearl" id="railPearl"></div></div>
+</div>
+
+<header id="siteHeader">
+  <span class="brand">Pilates con Jime</span>
+  <nav>
+    <a href="#metodo">Método</a>
+    <a href="#clases">Clases</a>
+    <a href="#horarios">Calendario</a>
+    <a href="#instructora">Instructora</a>
+  </nav>
+  <a href="https://wa.me/50686909330?text=Hola%20Jime,%20me%20gustar%C3%ADa%20agendar%20una%20clase%20de%20Pilates." target="_blank" class="pill-btn">Reservar</a>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="orb" style="width:340px;height:340px;background:var(--blush);top:8%;left:-4%;opacity:.55;animation:drift 10s ease-in-out infinite;"></div>
+    <div class="orb" style="width:260px;height:260px;background:var(--lilac);bottom:6%;left:38%;opacity:.4;animation:drift 13s ease-in-out infinite reverse;"></div>
+    <div style="position:relative; z-index:1;">
+      <p class="hero-eyebrow">Pilates a domicilio · mat &amp; reformer</p>
+      <h1 class="hero-title">Moverte con calma,<br><em>fortalecerte</em> de verdad.</h1>
+      <p class="hero-sub">Clases de pilates pensadas para tu cuerpo, tu ritmo y tu espacio. Sesiones íntimas a domicilio, atención cercana y resultados que se sienten desde la primera clase.</p>
+      <div class="hero-actions">
+        <a href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20m%C3%A1s%20informaci%C3%B3n%20para%20una%20clase%20de%20prueba." target="_blank" class="pill-btn">Reservar clase de prueba</a>
+        <a href="#metodo" class="text-link">Conocer el método</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="orb" style="width:220px;height:220px;background:var(--sage);top:6%;right:2%;opacity:.4;animation:drift 11s ease-in-out infinite;"></div>
+      <div class="blob-frame">
+        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop" alt="Clase de reformer pilates">
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="metodo">
+    <div class="section-head reveal">
+      <p class="eyebrow">El método</p>
+      <h2 class="section-title">Seis principios que <em>sostienen</em> cada clase</h2>
     </div>
 
-    <div class="tension-rail">
-        <span class="tension-label" id="tension-label">LIGERO</span>
-        <div class="tension-track"><div class="tension-dot" id="tension-dot"></div></div>
+    <p class="light-sweep reveal" id="lightSweep">Respirar no es pausa, es el motor. Cada inhalación prepara el cuerpo, cada exhalación construye fuerza real.</p>
+
+    <div class="principles-flow reveal">
+      <div class="principles-line"></div>
+      <div class="principles-row">
+        <div class="principle"><div class="principle-dot"></div><h3 class="principle-title">Control</h3><p class="principle-text">Cada movimiento se ejecuta con conciencia total, nunca con impulso.</p></div>
+        <div class="principle"><div class="principle-dot"></div><h3 class="principle-title">Precisión</h3><p class="principle-text">Importa más la calidad que la cantidad de repeticiones.</p></div>
+        <div class="principle"><div class="principle-dot"></div><h3 class="principle-title">Respiración</h3><p class="principle-text">El aire dirige el esfuerzo: inhalamos para preparar, exhalamos para trabajar.</p></div>
+        <div class="principle"><div class="principle-dot"></div><h3 class="principle-title">Centro</h3><p class="principle-text">Todo nace del powerhouse: abdomen, espalda baja y pelvis.</p></div>
+        <div class="principle"><div class="principle-dot"></div><h3 class="principle-title">Fluidez</h3><p class="principle-text">Las transiciones son parte del ejercicio, no una pausa.</p></div>
+        <div class="principle"><div class="principle-dot"></div><h3 class="principle-title">Concentración</h3><p class="principle-text">La mente presente en cada segundo, sesión tras sesión.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="clases">
+    <div class="section-head reveal">
+      <p class="eyebrow">Clases y tarifas</p>
+      <h2 class="section-title">Elegí cómo <em>querés moverte</em></h2>
     </div>
 
-    <div id="cursor"></div>
-    <div id="cursor-follower"></div>
+    <p class="format-intro reveal">Ofrecemos <b>mat a domicilio</b>, en modalidad <b>privada</b> o <b>grupal</b>. Elegí cuántas personas toman la clase para ver la tarifa al instante.</p>
 
-    <header id="header">
-        <div class="brand-logo">Pilates con Jime</div>
-        <div class="nav-right">
-            <nav>
-                <a href="#metodo" class="interactive">Método</a>
-                <a href="#clases" class="interactive">Clases</a>
-                <a href="#horarios" class="interactive">Calendario</a>
-                <a href="#instructora" class="interactive">Instructora</a>
-            </nav>
-            <a href="https://wa.me/50686909330?text=Hola%20Jime,%20me%20gustaría%20agendar%20una%20clase%20de%20Pilates." target="_blank" class="cta-btn interactive">RESERVAR CLASE</a>
+    <div class="pill-tabs reveal" id="tabsRow">
+      <div class="pill-tab" data-format="individual">Individual <span>1 persona</span></div>
+      <div class="pill-tab" data-format="duo">Dúo <span>2 personas</span></div>
+      <div class="pill-tab" data-format="trio">Trío <span>3 personas</span></div>
+      <div class="pill-tab" data-format="cuarteto">Cuarteto <span>4 personas</span></div>
+      <div class="pill-tab" data-format="grupo">Grupo <span>5+ personas</span></div>
+    </div>
+
+    <div class="glass-slot" id="glassSlot">
+      <div id="card-individual" class="glass-card" style="display:none;">
+        <div class="glass-name">Individual</div>
+        <div class="glass-people">1 persona</div>
+        <div class="price-row single"><div class="price-info"><span class="price-label">Clase suelta</span><span class="price-amount">$40 <small>USD</small></span><span class="price-crc">≈ ₡20,800</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20agendar%20una%20Clase%20Suelta%20Individual." target="_blank">Agendar</a></div>
+        <div class="price-row"><div class="price-info"><span class="price-label">4 clases / mes</span><span class="price-amount">$140 <small>USD</small></span><span class="price-crc">≈ ₡72,800</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20agendar%20el%20paquete%20Individual%20de%204%20clases." target="_blank">Agendar</a></div>
+        <div class="price-row"><div class="price-info"><span class="price-label">8 clases / mes</span><span class="price-amount">$260 <small>USD</small></span><span class="price-crc">≈ ₡135,200</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20agendar%20el%20paquete%20Individual%20de%208%20clases." target="_blank">Agendar</a></div>
+      </div>
+      <div id="card-duo" class="glass-card" style="display:none;">
+        <div class="glass-name">Dúo</div>
+        <div class="glass-people">2 personas · más elegido</div>
+        <div class="price-row single"><div class="price-info"><span class="price-label">Clase suelta</span><span class="price-amount">$30 <small>USD/p</small></span><span class="price-crc">≈ ₡15,600</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20D%C3%BAo." target="_blank">Agendar</a></div>
+        <div class="price-row"><div class="price-info"><span class="price-label">4 clases / mes</span><span class="price-amount">$100 <small>USD/p</small></span><span class="price-crc">≈ ₡52,000</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20D%C3%BAo%20de%204%20clases." target="_blank">Agendar</a></div>
+        <div class="price-row"><div class="price-info"><span class="price-label">8 clases / mes</span><span class="price-amount">$185 <small>USD/p</small></span><span class="price-crc">≈ ₡96,200</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20D%C3%BAo%20de%208%20clases." target="_blank">Agendar</a></div>
+      </div>
+      <div id="card-trio" class="glass-card" style="display:none;">
+        <div class="glass-name">Trío</div>
+        <div class="glass-people">3 personas</div>
+        <div class="price-row single"><div class="price-info"><span class="price-label">Clase suelta</span><span class="price-amount">$25 <small>USD/p</small></span><span class="price-crc">≈ ₡13,000</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20Tr%C3%ADo." target="_blank">Agendar</a></div>
+        <div class="price-row"><div class="price-info"><span class="price-label">4 clases / mes</span><span class="price-amount">$80 <small>USD/p</small></span><span class="price-crc">≈ ₡41,600</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Tr%C3%ADo%20de%204%20clases." target="_blank">Agendar</a></div>
+        <div class="price-row"><div class="price-info"><span class="price-label">8 clases / mes</span><span class="price-amount">$150 <small>USD/p</small></span><span class="price-crc">≈ ₡78,000</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Tr%C3%ADo%20de%208%20clases." target="_blank">Agendar</a></div>
+      </div>
+      <div id="card-cuarteto" class="glass-card" style="display:none;">
+        <div class="glass-name">Cuarteto</div>
+        <div class="glass-people">4 personas</div>
+        <div class="price-row single"><div class="price-info"><span class="price-label">Clase suelta</span><span class="price-amount">$20 <small>USD/p</small></span><span class="price-crc">≈ ₡10,400</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20Cuarteto." target="_blank">Agendar</a></div>
+        <div class="price-row"><div class="price-info"><span class="price-label">4 clases / mes</span><span class="price-amount">$65 <small>USD/p</small></span><span class="price-crc">≈ ₡33,800</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Cuarteto%20de%204%20clases." target="_blank">Agendar</a></div>
+        <div class="price-row"><div class="price-info"><span class="price-label">8 clases / mes</span><span class="price-amount">$120 <small>USD/p</small></span><span class="price-crc">≈ ₡62,400</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Cuarteto%20de%208%20clases." target="_blank">Agendar</a></div>
+      </div>
+      <div id="card-grupo" class="glass-card" style="display:none;">
+        <div class="glass-name">Grupo</div>
+        <div class="glass-people">5+ personas</div>
+        <div class="price-row single"><div class="price-info"><span class="price-label">Clase suelta</span><span class="price-amount">$15 <small>USD/p</small></span><span class="price-crc">≈ ₡7,800</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20Grupal." target="_blank">Agendar</a></div>
+        <div class="price-row"><div class="price-info"><span class="price-label">4 clases / mes</span><span class="price-amount">$50 <small>USD/p</small></span><span class="price-crc">≈ ₡26,000</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Grupo%20de%204%20clases." target="_blank">Agendar</a></div>
+        <div class="price-row"><div class="price-info"><span class="price-label">8 clases / mes</span><span class="price-amount">$95 <small>USD/p</small></span><span class="price-crc">≈ ₡49,400</span></div><a class="book-link" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Grupo%20de%208%20clases." target="_blank">Agendar</a></div>
+      </div>
+    </div>
+
+    <div class="gradient-chart reveal">
+      <span class="gradient-chart-label">Precio por persona, según cuántos toman la clase</span>
+      <div class="gradient-bars">
+        <div class="gbar" data-format="individual" style="height:100%"><span class="gbar-val">$40</span><span class="gbar-tag">1</span></div>
+        <div class="gbar" data-format="duo" style="height:75%"><span class="gbar-val">$30</span><span class="gbar-tag">2</span></div>
+        <div class="gbar" data-format="trio" style="height:62.5%"><span class="gbar-val">$25</span><span class="gbar-tag">3</span></div>
+        <div class="gbar" data-format="cuarteto" style="height:50%"><span class="gbar-val">$20</span><span class="gbar-tag">4</span></div>
+        <div class="gbar" data-format="grupo" style="height:37.5%"><span class="gbar-val">$15</span><span class="gbar-tag">5+</span></div>
+      </div>
+    </div>
+    <p class="eyebrow reveal" style="margin-top:18px;">Precios de clase suelta, por persona · tipo de cambio aprox. ₡520 = $1 USD</p>
+  </section>
+
+  <section class="section" id="horarios">
+    <div class="section-head reveal">
+      <p class="eyebrow">Disponibilidad</p>
+      <h2 class="section-title">Reservá tu <em>próxima sesión</em></h2>
+    </div>
+
+    <div class="admin-row"><button class="admin-link" id="adminToggle">editar disponibilidad</button></div>
+
+    <div class="admin-panel" id="adminPanel">
+      <h3>Administrar cupos</h3>
+      <form class="admin-form" id="adminForm">
+        <div class="form-group"><label>Fecha</label><input type="date" id="adminDate" required></div>
+        <div class="form-group"><label>Cupos totales</label><input type="number" id="adminTotal" min="1" max="20" value="4" required></div>
+        <div class="form-group"><label>Bookeados</label><input type="number" id="adminBooked" min="0" max="20" value="0" required></div>
+        <div class="form-group"><label>Nota / horario</label><input type="text" id="adminNote" value="Sesiones disponibles"></div>
+        <button type="submit" class="admin-save">Guardar</button>
+      </form>
+    </div>
+
+    <div class="cal-nav reveal">
+      <button class="cal-btn" id="prevMonth">← Anterior</button>
+      <div class="cal-month" id="calMonth">-- 2026</div>
+      <button class="cal-btn" id="nextMonth">Siguiente →</button>
+    </div>
+    <div class="cal-grid reveal" id="calGrid"></div>
+  </section>
+
+  <section class="section" id="instructora">
+    <div class="section-head reveal">
+      <p class="eyebrow">Instructora</p>
+      <h2 class="section-title">Conocé a <em>Jime</em></h2>
+    </div>
+    <div class="instructor-grid">
+      <div class="reveal">
+        <div class="blob-frame small">
+          <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=700&auto=format&fit=crop" alt="Jime, instructora de Pilates">
         </div>
-    </header>
-
-    <main>
-        <section class="hero">
-            <div>
-                <p class="hero-eyebrow">ESTUDIO DE PILATES — REFORMER &amp; MAT</p>
-                <h1 class="hero-title">Mueve tu cuerpo <em>con intención</em>,<br>respira con propósito.</h1>
-                <p class="hero-sub">En Pilates con Jime trabajamos fuerza, control y respiración en sesiones personalizadas a domicilio, sobre reformer y mat, para cuerpos que quieren moverse mejor.</p>
-                <div class="hero-actions">
-                    <a href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20más%20información%20para%20una%20clase%20de%20prueba." target="_blank" class="cta-btn interactive">RESERVAR CLASE DE PRUEBA</a>
-                    <a href="#clases" class="hero-link interactive">Ver modalidades ↓</a>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <svg class="breath-wave" viewBox="0 0 220 44" xmlns="http://www.w3.org/2000/svg">
-                    <path id="wave-path" d="M0,22 Q20,4 40,22 T80,22 T120,22 T160,22 T200,22 T240,22" />
-                </svg>
-                <div class="hero-frame">
-                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop" alt="Clase de reformer pilates">
-                </div>
-                <p class="hero-caption">Sesiones a domicilio, atención 100% enfocada.</p>
-            </div>
-        </section>
-
-        <section class="section-wrap" id="metodo">
-            <div class="section-header reveal">
-                <div>
-                    <p class="section-eyebrow">El Método</p>
-                    <h2 class="section-title">Los seis <em>principios</em> de Pilates</h2>
-                </div>
-                <span class="section-index">JOSEPH PILATES</span>
-            </div>
-            <div class="principles-grid reveal">
-                <div class="principle-card"><div class="principle-num">01</div><h3 class="principle-title">Control</h3><p class="principle-text">Cada movimiento se ejecuta con conciencia total, nunca con impulso ni inercia.</p></div>
-                <div class="principle-card"><div class="principle-num">02</div><h3 class="principle-title">Precisión</h3><p class="principle-text">Importa más la calidad del movimiento que la cantidad de repeticiones.</p></div>
-                <div class="principle-card"><div class="principle-num">03</div><h3 class="principle-title">Respiración</h3><p class="principle-text">El aire dirige el esfuerzo: inhalamos para prepararnos, exhalamos para trabajar.</p></div>
-                <div class="principle-card"><div class="principle-num">04</div><h3 class="principle-title">Centro</h3><p class="principle-text">Todo movimiento nace del "powerhouse": abdomen, espalda baja, glúteos y pelvis.</p></div>
-                <div class="principle-card"><div class="principle-num">05</div><h3 class="principle-title">Fluidez</h3><p class="principle-text">Las transiciones son parte del ejercicio, no una pausa entre repeticiones.</p></div>
-                <div class="principle-card"><div class="principle-num">06</div><h3 class="principle-title">Concentración</h3><p class="principle-text">La mente está presente en cada segundo del cuerpo, sesión tras sesión.</p></div>
-            </div>
-        </section>
-
-        <section class="section-wrap" id="clases">
-            <div class="section-header reveal">
-                <div>
-                    <p class="section-eyebrow">Servicios</p>
-                    <h2 class="section-title">Elige tu <em>formato</em></h2>
-                </div>
-                <span class="section-index">MAT A DOMICILIO</span>
-            </div>
-
-            <p class="format-intro reveal">Ofrecemos <b>mat a domicilio</b>, en modalidad <b>privada</b> o <b>grupal</b>. Haz clic en la cantidad de personas para ver el desglose de tarifas y clases sueltas al instante.</p>
-
-            <div class="format-hero reveal">
-                <span class="format-hero-eyebrow">Estás eligiendo</span>
-                <h3 class="format-hero-title">Mat</h3>
-                <p class="format-hero-sub">a domicilio — selecciona cuántas personas toman la clase para desplegar precios</p>
-            </div>
-
-            <div class="format-grid reveal">
-                <div class="format-tag interactive" onclick="toggleFormatPricing('individual')">Individual <span>1 persona</span></div>
-                <div class="format-tag interactive" onclick="toggleFormatPricing('duo')">Dúo <span>2 personas</span></div>
-                <div class="format-tag interactive" onclick="toggleFormatPricing('trio')">Trío <span>3 personas</span></div>
-                <div class="format-tag interactive" onclick="toggleFormatPricing('cuarteto')">Cuarteto <span>4 personas</span></div>
-                <div class="format-tag interactive" onclick="toggleFormatPricing('grupo')">Grupo <span>5+ personas</span></div>
-            </div>
-
-            <!-- CONTENEDOR DESPLEGABLE DE PRECIOS POR FORMATO -->
-            <div class="pricing-accordion-container" id="pricingAccordion">
-                
-                <!-- INDIVIDUAL -->
-                <div class="price-card accordion-card" id="card-individual" style="display: none;">
-                    <div class="price-name">Individual</div>
-                    <div class="price-people">1 persona</div>
-                    
-                    <div class="package-option single-class">
-                        <div class="package-info">
-                            <span class="package-label" style="color:var(--accent-brass); font-weight:600;">Clase Suelta</span>
-                            <span class="package-price">$40 <small>USD</small></span>
-                            <span class="package-crc">≈ ₡20,800</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20agendar%20una%20Clase%20Suelta%20Individual." target="_blank">Agendar</a>
-                    </div>
-
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">4 clases / mes</span>
-                            <span class="package-price">$140 <small>USD</small></span>
-                            <span class="package-crc">≈ ₡72,800</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20agendar%20el%20paquete%20Individual%20de%204%20clases." target="_blank">Agendar</a>
-                    </div>
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">8 clases / mes</span>
-                            <span class="package-price">$260 <small>USD</small></span>
-                            <span class="package-crc">≈ ₡135,200</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20agendar%20el%20paquete%20Individual%20de%208%20clases." target="_blank">Agendar</a>
-                    </div>
-                </div>
-
-                <!-- DÚO -->
-                <div class="price-card featured accordion-card" id="card-duo" style="display: none;">
-                    <div class="price-badge">Más popular</div>
-                    <div class="price-name">Dúo</div>
-                    <div class="price-people">2 personas</div>
-
-                    <div class="package-option single-class">
-                        <div class="package-info">
-                            <span class="package-label" style="color:var(--accent-brass); font-weight:600;">Clase Suelta</span>
-                            <span class="package-price">$30 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡15,600</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20Dúo." target="_blank">Agendar</a>
-                    </div>
-
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">4 clases / mes</span>
-                            <span class="package-price">$100 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡52,000</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Dúo%20de%204%20clases." target="_blank">Agendar</a>
-                    </div>
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">8 clases / mes</span>
-                            <span class="package-price">$185 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡96,200</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Dúo%20de%208%20clases." target="_blank">Agendar</a>
-                    </div>
-                </div>
-
-                <!-- TRÍO -->
-                <div class="price-card accordion-card" id="card-trio" style="display: none;">
-                    <div class="price-name">Trío</div>
-                    <div class="price-people">3 personas</div>
-
-                    <div class="package-option single-class">
-                        <div class="package-info">
-                            <span class="package-label" style="color:var(--accent-brass); font-weight:600;">Clase Suelta</span>
-                            <span class="package-price">$25 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡13,000</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20Trío." target="_blank">Agendar</a>
-                    </div>
-
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">4 clases / mes</span>
-                            <span class="package-price">$80 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡41,600</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Trío%20de%204%20clases." target="_blank">Agendar</a>
-                    </div>
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">8 clases / mes</span>
-                            <span class="package-price">$150 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡78,000</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Trío%20de%208%20clases." target="_blank">Agendar</a>
-                    </div>
-                </div>
-
-                <!-- CUARTETO -->
-                <div class="price-card accordion-card" id="card-cuarteto" style="display: none;">
-                    <div class="price-name">Cuarteto</div>
-                    <div class="price-people">4 personas</div>
-
-                    <div class="package-option single-class">
-                        <div class="package-info">
-                            <span class="package-label" style="color:var(--accent-brass); font-weight:600;">Clase Suelta</span>
-                            <span class="package-price">$20 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡10,400</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20Cuarteto." target="_blank">Agendar</a>
-                    </div>
-
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">4 clases / mes</span>
-                            <span class="package-price">$65 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡33,800</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Cuarteto%20de%204%20clases." target="_blank">Agendar</a>
-                    </div>
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">8 clases / mes</span>
-                            <span class="package-price">$120 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡62,400</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Cuarteto%20de%208%20clases." target="_blank">Agendar</a>
-                    </div>
-                </div>
-
-                <!-- GRUPO -->
-                <div class="price-card accordion-card" id="card-grupo" style="display: none;">
-                    <div class="price-name">Grupo</div>
-                    <div class="price-people">5+ personas</div>
-
-                    <div class="package-option single-class">
-                        <div class="package-info">
-                            <span class="package-label" style="color:var(--accent-brass); font-weight:600;">Clase Suelta</span>
-                            <span class="package-price">$15 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡7,800</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20una%20Clase%20Suelta%20Grupal." target="_blank">Agendar</a>
-                    </div>
-
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">4 clases / mes</span>
-                            <span class="package-price">$50 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡26,000</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Grupo%20de%204%20clases." target="_blank">Agendar</a>
-                    </div>
-                    <div class="package-option">
-                        <div class="package-info">
-                            <span class="package-label">8 clases / mes</span>
-                            <span class="package-price">$95 <small>USD/p</small></span>
-                            <span class="package-crc">≈ ₡49,400</span>
-                        </div>
-                        <a class="package-btn interactive" href="https://wa.me/50686909330?text=Hola%20Jime,%20queremos%20agendar%20el%20paquete%20Grupo%20de%208%20clases." target="_blank">Agendar</a>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="price-curve reveal" aria-hidden="false">
-                <span class="price-curve-label">Precio por persona, según cuántos toman la clase</span>
-                <div class="price-curve-bars">
-                    <div class="price-curve-bar interactive" data-format="individual" onclick="toggleFormatPricing('individual')" style="height:100%"><span class="price-curve-value">$40</span><span class="price-curve-tag">1</span></div>
-                    <div class="price-curve-bar interactive" data-format="duo" onclick="toggleFormatPricing('duo')" style="height:75%"><span class="price-curve-value">$30</span><span class="price-curve-tag">2</span></div>
-                    <div class="price-curve-bar interactive" data-format="trio" onclick="toggleFormatPricing('trio')" style="height:62.5%"><span class="price-curve-value">$25</span><span class="price-curve-tag">3</span></div>
-                    <div class="price-curve-bar interactive" data-format="cuarteto" onclick="toggleFormatPricing('cuarteto')" style="height:50%"><span class="price-curve-value">$20</span><span class="price-curve-tag">4</span></div>
-                    <div class="price-curve-bar interactive" data-format="grupo" onclick="toggleFormatPricing('grupo')" style="height:37.5%"><span class="price-curve-value">$15</span><span class="price-curve-tag">5+</span></div>
-                </div>
-            </div>
-
-            <p class="format-note reveal">Precios de clase suelta, por persona · tipo de cambio aproximado ₡520 = $1 USD.</p>
-        </section>
-
-        <!-- CALENDARIO INTERACTIVO & PANEL ADMIN -->
-        <section class="section-wrap" id="horarios">
-            <div class="section-header reveal">
-                <div>
-                    <p class="section-eyebrow">Disponibilidad</p>
-                    <h2 class="section-title">Calendario <em>semanal y mensual</em></h2>
-                </div>
-                <span class="section-index">RESERVAS EN TIEMPO REAL</span>
-            </div>
-
-            <button class="toggle-admin-btn interactive" onclick="toggleAdminPanel()">⚙️ Panel de Admin (Editar Cupos)</button>
-
-            <!-- PANEL DE ADMINISTRADOR -->
-            <div class="admin-controls" id="adminPanel">
-                <div class="admin-title">
-                    <span>Administrar Cupos del Calendario</span>
-                    <small style="font-size:0.65rem; color:var(--text-dim); font-family:var(--mono);">MODO ADMINISTRADOR</small>
-                </div>
-                <form class="admin-form" id="adminForm" onsubmit="saveSlotAdmin(event)">
-                    <div class="form-group">
-                        <label>Fecha A Editar</label>
-                        <input type="date" id="adminDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Cupos Totales</label>
-                        <input type="number" id="adminTotal" min="1" max="20" value="4" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Bookeados (Ocupados)</label>
-                        <input type="number" id="adminBooked" min="0" max="20" value="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Nota / Horario</label>
-                        <input type="text" id="adminNote" placeholder="Ej: 8:00 AM - Mat Dúo" value="Sesiones disponibles">
-                    </div>
-                    <button type="submit" class="admin-btn interactive">Actualizar Día</button>
-                </form>
-            </div>
-
-            <!-- CONTROLES NAVEGACIÓN Y CALENDARIO -->
-            <div class="calendar-header-nav reveal">
-                <button class="cal-nav-btn interactive" onclick="changeMonth(-1)">← Mes Anterior</button>
-                <div class="calendar-month-title" id="currentMonthYear">-- 2026</div>
-                <button class="cal-nav-btn interactive" onclick="changeMonth(1)">Mes Siguiente →</button>
-            </div>
-
-            <div class="calendar-grid reveal" id="calendarGrid">
-                <!-- Se genera dinámicamente con JS -->
-            </div>
-        </section>
-
-        <section class="section-wrap" id="instructora">
-            <div class="section-header reveal">
-                <div>
-                    <p class="section-eyebrow">Instructora</p>
-                    <h2 class="section-title">Conoce a <em>Jime</em></h2>
-                </div>
-                <span class="section-index">CERTIFICADA</span>
-            </div>
-            <div class="instructor-grid">
-                <div class="instructor-image reveal">
-                    <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=900&auto=format&fit=crop" alt="Jime, instructora de Pilates">
-                </div>
-                <div class="reveal">
-                    <p class="instructor-quote">"No enseño a hacer más repeticiones. Enseño a <span>sentir</span> cada una de ellas."</p>
-                    <div class="credentials-list">
-                        <div class="credential-row"><span>Certificación</span><b>Comprehensive Pilates, +8 años</b></div>
-                        <div class="credential-row"><span>Especialidad</span><b>Rehabilitación postural y reformer</b></div>
-                        <div class="credential-row"><span>Formación</span><b>Contemporánea + método clásico</b></div>
-                        <div class="credential-row"><span>Alumnas activas</span><b>+150</b></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="marquee-section reveal">
-            <div class="marquee-track" id="marquee-track">
-                <span class="t-quote">"Cambié mi postura y mi relación con mi cuerpo en tres meses."<span class="t-name">— ANDREA R.</span></span>
-                <span class="sep">✦</span>
-                <span class="t-quote">"El enfoque personalizado a domicilio hace toda la diferencia."<span class="t-name">— MONTSERRAT L.</span></span>
-                <span class="sep">✦</span>
-                <span class="t-quote">"Dejé el dolor de espalda después de años de intentarlo."<span class="t-name">— PAULINA G.</span></span>
-                <span class="sep">✦</span>
-            </div>
-        </section>
-
-        <!-- CONTACTO CON DATOS ACTUALIZADOS -->
-        <section class="contact-section" id="contact">
-            <div class="contact-grid">
-                <div class="reveal">
-                    <h2 class="contact-title">Reserva tu <em>primera clase</em></h2>
-                    <p class="contact-sub">Escríbenos directamente por WhatsApp o correo electrónico y coordinamos el horario que mejor te convenga.</p>
-                    <div class="contact-rows">
-                        <div>
-                            <div class="spec-label">Email</div>
-                            <a href="mailto:jimena092213@gmail.com" class="interactive">jimena092213@gmail.com</a>
-                        </div>
-                        <div>
-                            <div class="spec-label">WhatsApp</div>
-                            <a href="https://wa.me/50686909330?text=Hola%20Jime,%20quisiera%20consultar%20por%20clases%20de%20Pilates." target="_blank" class="interactive">+506 8690-9330</a>
-                        </div>
-                        <div>
-                            <div class="spec-label">Instagram</div>
-                            <a href="#" class="interactive">@pilatesjime</a>
-                        </div>
-                        <div>
-                            <div class="spec-label">Modalidad</div>
-                            <span class="val">A domicilio / Presencial</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="contact-map reveal">
-                    <img src="https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=900&auto=format&fit=crop" alt="Estudio Pilates con Jime">
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-brand">Pilates con Jime</div>
-        <div class="footer-links">
-            <a href="#" class="interactive">Instagram</a>
-            <a href="https://wa.me/50686909330" target="_blank" class="interactive">WhatsApp: 8690-9330</a>
-            <a href="mailto:jimena092213@gmail.com" class="interactive">Email</a>
+      </div>
+      <div class="reveal">
+        <p class="instructor-quote">"No enseño a hacer más repeticiones. Enseño a <em>sentir</em> cada una de ellas."</p>
+        <div class="chip-row">
+          <div class="chip"><b>+8 años</b><span>Certificación</span></div>
+          <div class="chip"><b>Reformer</b><span>Especialidad</span></div>
+          <div class="chip"><b>Contemporánea</b><span>Formación</span></div>
+          <div class="chip"><b>+150</b><span>Alumnas</span></div>
         </div>
-        <p class="footer-credit">© 2026 Pilates con Jime — TODOS LOS DERECHOS RESERVADOS</p>
-    </footer>
+      </div>
+    </div>
+  </section>
 
-    <script>
-        /* Preloader breath cycle */
-        const preloader = document.getElementById('preloader');
-        const breathWord = document.getElementById('breath-word');
-        setTimeout(() => { if(breathWord) breathWord.textContent = 'EXHALA'; }, 1800);
-        setTimeout(() => { if(preloader) preloader.classList.add('hidden'); }, 3400);
+  <section class="section reveal" style="padding-top:0;">
+    <div class="quote-belt">
+      <div class="quote-track" id="quoteTrack">
+        <span class="quote-card"><p>"Cambié mi postura y mi relación con mi cuerpo en tres meses."</p><span class="who">Andrea R.</span></span>
+        <span class="quote-card"><p>"El enfoque personalizado a domicilio hace toda la diferencia."</p><span class="who">Montserrat L.</span></span>
+        <span class="quote-card"><p>"Dejé el dolor de espalda después de años de intentarlo."</p><span class="who">Paulina G.</span></span>
+      </div>
+    </div>
+  </section>
 
-        /* Header scroll state */
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 40));
+  <section class="finale" id="contact">
+    <div class="orb" style="width:380px;height:380px;background:var(--lilac);top:-10%;right:-6%;opacity:.4;animation:drift 14s ease-in-out infinite;"></div>
+    <div class="orb" style="width:260px;height:260px;background:var(--sage);bottom:-8%;left:2%;opacity:.35;animation:drift 12s ease-in-out infinite reverse;"></div>
+    <div class="finale-grid">
+      <div class="reveal">
+        <h2 class="finale-title">Reservá tu <em>primera clase</em></h2>
+        <p class="finale-sub">Escribinos directamente por WhatsApp o correo y coordinamos el horario que mejor te convenga.</p>
+        <a href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20m%C3%A1s%20informaci%C3%B3n%20para%20una%20clase%20de%20prueba." target="_blank" class="pill-btn">Reservar clase de prueba</a>
+        <div class="contact-rows">
+          <div><div class="spec">Email</div><a href="mailto:jimena092213@gmail.com">jimena092213@gmail.com</a></div>
+          <div><div class="spec">WhatsApp</div><a href="https://wa.me/50686909330?text=Hola%20Jime,%20quisiera%20consultar%20por%20clases%20de%20Pilates." target="_blank">+506 8690-9330</a></div>
+          <div><div class="spec">Instagram</div><a href="#">@pilatesjime</a></div>
+          <div><div class="spec">Modalidad</div><span class="val">A domicilio</span></div>
+        </div>
+      </div>
+      <div class="finale-visual reveal">
+        <div class="blob-frame">
+          <img src="https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=800&auto=format&fit=crop" alt="Estudio Pilates con Jime">
+        </div>
+      </div>
+    </div>
+  </section>
 
-        /* Spring tension rail tied to scroll position */
-        const tensionDot = document.getElementById('tension-dot');
-        const tensionLabel = document.getElementById('tension-label');
-        const trackHeight = 220;
-        const levels = ['LIGERO', 'MEDIO', 'PESADO', 'MÁXIMO'];
-        function updateTension() {
-            const scrollPct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-            const pos = Math.min(Math.max(scrollPct, 0), 1);
-            if(tensionDot) tensionDot.style.top = `${pos * trackHeight}px`;
-            const levelIndex = Math.min(Math.floor(pos * levels.length), levels.length - 1);
-            if(tensionLabel) tensionLabel.textContent = levels[levelIndex];
-        }
-        window.addEventListener('scroll', updateTension);
-        updateTension();
+</main>
 
-        /* Cursor Custom Animation */
-        const cursor = document.getElementById('cursor');
-        const follower = document.getElementById('cursor-follower');
-        let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX; mouseY = e.clientY;
-            if(cursor) { cursor.style.left = `${mouseX}px`; cursor.style.top = `${mouseY}px`; }
-        });
-        function animateFollower() {
-            followerX += (mouseX - followerX) * 0.14;
-            followerY += (mouseY - followerY) * 0.14;
-            if(follower) { follower.style.left = `${followerX}px`; follower.style.top = `${followerY}px`; }
-            requestAnimationFrame(animateFollower);
-        }
-        animateFollower();
-        document.querySelectorAll('.interactive').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
-        });
+<footer>
+  <div class="foot-brand">Pilates con Jime</div>
+  <div class="foot-links">
+    <a href="#">Instagram</a>
+    <a href="https://wa.me/50686909330" target="_blank">WhatsApp</a>
+    <a href="mailto:jimena092213@gmail.com">Email</a>
+  </div>
+  <p class="foot-credit">© 2026 Pilates con Jime — hecho con cariño</p>
+</footer>
 
-        /* Scroll reveal */
-        const io = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('in'); });
-        }, { threshold: 0.15 });
-        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+<a href="https://wa.me/50686909330?text=Hola%20Jime,%20quisiera%20consultar%20por%20clases%20de%20Pilates." target="_blank" class="float-cta" id="floatCta" aria-label="Escribinos por WhatsApp">
+  <span class="float-label">Escribinos</span>
+  <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.5c0 4.42-4.03 8-9 8-1.13 0-2.21-.19-3.2-.53L3 21l1.2-4.53A8.6 8.6 0 0 1 3 11.5c0-4.42 4.03-8 9-8s9 3.58 9 8z"/></svg>
+</a>
 
-        /* Marquee loop */
-        const track = document.getElementById('marquee-track');
-        if(track) track.innerHTML += track.innerHTML;
+<script>
+setTimeout(()=>document.getElementById('preloader').classList.add('hidden'), 1500);
 
-        /* ==================== ACCORDEÓN DE PRECIOS EN SERVICIOS ==================== */
-        let activeFormatKey = null;
+const header = document.getElementById('siteHeader');
+window.addEventListener('scroll', ()=> header.classList.toggle('scrolled', window.scrollY>30));
 
-        function toggleFormatPricing(formatKey) {
-            const container = document.getElementById('pricingAccordion');
-            const tags = document.querySelectorAll('.format-grid .format-tag');
-            const cards = document.querySelectorAll('.accordion-card');
-            const bars = document.querySelectorAll('.price-curve-bar');
+const floatCta = document.getElementById('floatCta');
+function updateFloat(){ floatCta.classList.toggle('visible', window.scrollY > window.innerHeight*0.7); }
+window.addEventListener('scroll', updateFloat); updateFloat();
 
-            // Si se hace clic en la misma opción activa, la cerramos
-            if (activeFormatKey === formatKey) {
-                container.classList.remove('open');
-                tags.forEach(t => t.classList.remove('active'));
-                bars.forEach(b => b.classList.remove('active'));
-                activeFormatKey = null;
-                return;
-            }
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('in'); });
+},{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-            activeFormatKey = formatKey;
+/* Rail: mapa suave por sección */
+const railTrack = document.getElementById('railTrack');
+const railPearl = document.getElementById('railPearl');
+const railSections = [
+  {id:'metodo', label:'Método'},
+  {id:'clases', label:'Clases'},
+  {id:'horarios', label:'Calendario'},
+  {id:'instructora', label:'Instructora'},
+  {id:'contact', label:'Contacto'}
+];
+let railDots = [];
+function buildRail(){
+  railDots.forEach(d=>d.el.remove()); railDots=[];
+  const docH = document.body.scrollHeight - window.innerHeight;
+  if(docH<=0) return;
+  railSections.forEach(s=>{
+    const el = document.getElementById(s.id);
+    if(!el) return;
+    const pct = Math.min(Math.max(el.offsetTop/docH,0),1);
+    const dot = document.createElement('div');
+    dot.className='rail-dot';
+    dot.style.top = (pct*100)+'%';
+    dot.innerHTML = `<span class="rail-dot-label">${s.label}</span>`;
+    dot.addEventListener('click', ()=> el.scrollIntoView({behavior:'smooth'}));
+    railTrack.appendChild(dot);
+    railDots.push({el:dot, pct});
+  });
+}
+function updateRail(){
+  const docH = document.body.scrollHeight - window.innerHeight;
+  const pos = docH>0 ? Math.min(Math.max(window.scrollY/docH,0),1) : 0;
+  railPearl.style.top = (pos*100)+'%';
+  let activeIdx=-1;
+  railDots.forEach((d,i)=>{ if(pos>=d.pct-0.015) activeIdx=i; });
+  railDots.forEach((d,i)=>d.el.classList.toggle('active', i===activeIdx));
+}
+window.addEventListener('scroll', updateRail);
+window.addEventListener('resize', ()=>{ buildRail(); updateRail(); });
+window.addEventListener('load', ()=>{ buildRail(); updateRail(); });
+buildRail(); updateRail();
 
-            // Actualizar estado activo en los botones (tags)
-            tags.forEach((tag, idx) => {
-                const keys = ['individual', 'duo', 'trio', 'cuarteto', 'grupo'];
-                if (keys[idx] === formatKey) {
-                    tag.classList.add('active');
-                } else {
-                    tag.classList.remove('active');
-                }
-            });
+/* Light sweep sobre el manifiesto, ligado al scroll */
+const lightSweep = document.getElementById('lightSweep');
+function updateSweep(){
+  if(!lightSweep) return;
+  const rect = lightSweep.getBoundingClientRect();
+  const vh = window.innerHeight;
+  const progress = Math.min(Math.max((vh*0.85-rect.top)/(rect.height+vh*0.4),0),1);
+  lightSweep.style.backgroundPosition = `${100-progress*180}% 0`;
+}
+window.addEventListener('scroll', updateSweep); updateSweep();
 
-            // Reflejar la selección en el gráfico de precio por persona
-            bars.forEach(bar => bar.classList.toggle('active', bar.dataset.format === formatKey));
+/* Tabs de clases */
+let activeFormat = null;
+function selectFormat(fmt){
+  const tabs = document.querySelectorAll('.pill-tab');
+  const cards = document.querySelectorAll('.glass-card');
+  const bars = document.querySelectorAll('.gbar');
+  const slot = document.getElementById('glassSlot');
+  if(activeFormat === fmt){
+    slot.classList.remove('open');
+    tabs.forEach(t=>t.classList.remove('active'));
+    bars.forEach(b=>b.classList.remove('active'));
+    activeFormat = null;
+    return;
+  }
+  activeFormat = fmt;
+  tabs.forEach(t=>t.classList.toggle('active', t.dataset.format===fmt));
+  bars.forEach(b=>b.classList.toggle('active', b.dataset.format===fmt));
+  cards.forEach(c=>c.style.display='none');
+  const target = document.getElementById('card-'+fmt);
+  if(target) target.style.display='block';
+  slot.classList.add('open');
+}
+document.querySelectorAll('.pill-tab, .gbar').forEach(el=>{
+  el.addEventListener('click', ()=> selectFormat(el.dataset.format));
+});
 
-            // Mostrar solo la tarjeta correspondiente
-            cards.forEach(card => card.style.display = 'none');
-            const targetCard = document.getElementById(`card-${formatKey}`);
-            if (targetCard) {
-                targetCard.style.display = 'block';
-            }
+/* Calendario + admin */
+let currentDate = new Date();
+let scheduleData = JSON.parse(localStorage.getItem('pilates_schedule_v3')) || {
+  "2026-08-03": {total:4, booked:2, note:"7:00 AM / 8:30 AM"},
+  "2026-08-05": {total:4, booked:4, note:"Lleno total"}
+};
+document.getElementById('adminToggle').addEventListener('click', ()=> document.getElementById('adminPanel').classList.toggle('active'));
+document.getElementById('adminForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const d = document.getElementById('adminDate').value;
+  if(!d) return;
+  scheduleData[d] = {
+    total: parseInt(document.getElementById('adminTotal').value),
+    booked: parseInt(document.getElementById('adminBooked').value),
+    note: document.getElementById('adminNote').value
+  };
+  localStorage.setItem('pilates_schedule_v3', JSON.stringify(scheduleData));
+  renderCalendar();
+  alert('¡Día actualizado en el calendario!');
+});
+document.getElementById('prevMonth').addEventListener('click', ()=>{ currentDate.setMonth(currentDate.getMonth()-1); renderCalendar(); });
+document.getElementById('nextMonth').addEventListener('click', ()=>{ currentDate.setMonth(currentDate.getMonth()+1); renderCalendar(); });
 
-            // Desplegar el contenedor suavemente
-            container.classList.add('open');
-        }
+function renderCalendar(){
+  const grid = document.getElementById('calGrid');
+  const monthTitle = document.getElementById('calMonth');
+  grid.innerHTML = '';
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const monthNames = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  const dayNames = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+  monthTitle.textContent = `${monthNames[month]} ${year}`;
+  dayNames.forEach(d=>{ const c=document.createElement('div'); c.className='cal-name'; c.textContent=d; grid.appendChild(c); });
+  const firstDay = new Date(year,month,1).getDay();
+  const totalDays = new Date(year,month+1,0).getDate();
+  for(let i=0;i<firstDay;i++){ const c=document.createElement('div'); c.className='cal-cell empty'; grid.appendChild(c); }
+  for(let day=1; day<=totalDays; day++){
+    const cell = document.createElement('div'); cell.className='cal-cell';
+    const key = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    let html = `<div class="cal-num">${day}</div>`;
+    if(scheduleData[key]){
+      const info = scheduleData[key];
+      const avail = info.total - info.booked;
+      let cls='st-ok', txt=`${avail} disponibles`;
+      if(avail<=0){ cls='st-full'; txt='Lleno'; }
+      else if(avail<=2){ cls='st-low'; txt=`¡Solo ${avail}!`; }
+      html += `<div><span style="font-size:.6rem;color:var(--text-soft);">${info.note||''}</span><span class="cal-badge ${cls}">${txt}</span></div>`;
+    } else {
+      html += `<div><span class="cal-badge st-ok">Disponible</span></div>`;
+    }
+    cell.innerHTML = html;
+    grid.appendChild(cell);
+  }
+}
+renderCalendar();
+document.getElementById('adminDate').value = new Date().toISOString().split('T')[0];
 
-        /* ==================== SISTEMA DE CALENDARIO INTERACTIVO ==================== */
-        let currentDate = new Date();
-        // Cargar datos guardados del administrador en LocalStorage
-        let scheduleData = JSON.parse(localStorage.getItem('pilates_schedule_data')) || {
-            // Ejemplo por defecto
-            "2026-08-03": { total: 4, booked: 2, note: "7:00 AM / 8:30 AM" },
-            "2026-08-05": { total: 4, booked: 4, note: "Lleno total" }
-        };
-
-        function toggleAdminPanel() {
-            const panel = document.getElementById('adminPanel');
-            panel.classList.toggle('active');
-        }
-
-        function saveSlotAdmin(e) {
-            e.preventDefault();
-            const dateVal = document.getElementById('adminDate').value;
-            const totalVal = parseInt(document.getElementById('adminTotal').value);
-            const bookedVal = parseInt(document.getElementById('adminBooked').value);
-            const noteVal = document.getElementById('adminNote').value;
-
-            if(!dateVal) return;
-
-            scheduleData[dateVal] = {
-                total: totalVal,
-                booked: bookedVal,
-                note: noteVal
-            };
-
-            localStorage.setItem('pilates_schedule_data', JSON.stringify(scheduleData));
-            renderCalendar();
-            alert('¡Día de calendario actualizado exitosamente!');
-        }
-
-        function changeMonth(delta) {
-            currentDate.setMonth(currentDate.getMonth() + delta);
-            renderCalendar();
-        }
-
-        function renderCalendar() {
-            const grid = document.getElementById('calendarGrid');
-            const monthTitle = document.getElementById('currentMonthYear');
-            grid.innerHTML = '';
-
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-
-            const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            const dayNames = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
-
-            monthTitle.textContent = `${monthNames[month]} ${year}`;
-
-            // Renderizar encabezado de días
-            dayNames.forEach(day => {
-                const headerCell = document.createElement('div');
-                headerCell.className = 'cal-day-name';
-                headerCell.textContent = day;
-                grid.appendChild(headerCell);
-            });
-
-            // Primer día del mes y total de días
-            const firstDayIndex = new Date(year, month, 1).getDay();
-            const totalDays = new Date(year, month + 1, 0).getDate();
-
-            // Celdas vacías previas
-            for (let i = 0; i < firstDayIndex; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = 'cal-day-cell empty';
-                grid.appendChild(emptyCell);
-            }
-
-            // Días del mes
-            for (let day = 1; day <= totalDays; day++) {
-                const cell = document.createElement('div');
-                cell.className = 'cal-day-cell';
-
-                const formattedMonth = String(month + 1).padStart(2, '0');
-                const formattedDay = String(day).padStart(2, '0');
-                const dateKey = `${year}-${formattedMonth}-${formattedDay}`;
-
-                let dayContent = `<div class="cal-day-number">${day}</div>`;
-
-                if (scheduleData[dateKey]) {
-                    const info = scheduleData[dateKey];
-                    const available = info.total - info.booked;
-                    
-                    let statusClass = 'status-available';
-                    let statusText = `${available} disponibles`;
-
-                    if (available <= 0) {
-                        statusClass = 'status-full';
-                        statusText = 'Lleno total';
-                    } else if (available <= 2) {
-                        statusClass = 'status-limited';
-                        statusText = `¡Solo ${available} cupo(s)!`;
-                    }
-
-                    dayContent += `
-                        <div class="cal-slots-info">
-                            <span style="font-size:0.65rem; color:var(--text-dim); text-transform:uppercase;">${info.note || ''}</span>
-                            <span class="slot-badge ${statusClass}">${statusText}</span>
-                            <span style="font-size:0.58rem; color:var(--text-faint); margin-top:2px; display:block;">${info.booked}/${info.total} bookeados</span>
-                        </div>
-                    `;
-                } else {
-                    dayContent += `
-                        <div class="cal-slots-info">
-                            <span class="slot-badge status-available">Disponible</span>
-                        </div>
-                    `;
-                }
-
-                cell.innerHTML = dayContent;
-                grid.appendChild(cell);
-            }
-        }
-
-        // Inicializar Calendario
-        document.addEventListener('DOMContentLoaded', () => {
-            renderCalendar();
-            // Pre-seleccionar fecha actual en el admin panel
-            const todayStr = new Date().toISOString().split('T')[0];
-            const adminDateInput = document.getElementById('adminDate');
-            if(adminDateInput) adminDateInput.value = todayStr;
-        });
-    </script>
+/* Loop de testimonios */
+const quoteTrack = document.getElementById('quoteTrack');
+quoteTrack.innerHTML += quoteTrack.innerHTML;
+</script>
 </body>
 </html>
