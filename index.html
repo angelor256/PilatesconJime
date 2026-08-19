@@ -38,8 +38,27 @@ img{display:block; width:100%; height:100%; object-fit:cover;}
 /* ============ PRELOADER — mínimo, sin figuras duras ============ */
 #preloader{position:fixed; inset:0; z-index:10000; background:var(--bg); display:flex; align-items:center; justify-content:center; transition:opacity .8s ease, visibility .8s ease;}
 #preloader.hidden{opacity:0; visibility:hidden; pointer-events:none;}
-.pre-word{font-family:var(--serif); font-style:italic; font-weight:300; font-size:1.6rem; letter-spacing:10px; color:var(--text-soft); opacity:0; animation:preIn 1.6s ease forwards;}
-@keyframes preIn{0%{opacity:0; letter-spacing:22px;} 60%{opacity:1;} 100%{opacity:0; letter-spacing:2px;}}
+.breathe-wrap{display:flex; flex-direction:column; align-items:center; gap:34px;}
+.breathe-stage{position:relative; width:150px; height:150px; display:flex; align-items:center; justify-content:center;}
+.breathe-glow{
+  position:absolute; width:150px; height:150px; border-radius:50%;
+  background:radial-gradient(circle, rgba(221,212,233,.65), rgba(243,217,211,.35) 55%, transparent 75%);
+  filter:blur(8px); animation:breatheGlow 4s ease-in-out infinite;
+}
+.breathe-ring{
+  position:absolute; width:104px; height:104px; border-radius:50%;
+  border:1px solid rgba(201,141,143,.4); animation:breatheRing 4s ease-in-out infinite;
+}
+.breathe-circle{
+  position:relative; width:58px; height:58px; border-radius:50%;
+  background:radial-gradient(circle at 32% 28%, #ffffff, var(--blush) 42%, var(--rose) 100%);
+  box-shadow:0 0 34px 6px rgba(201,141,143,.4);
+  animation:breatheScale 4s ease-in-out infinite;
+}
+@keyframes breatheScale{0%,100%{transform:scale(.74);} 50%{transform:scale(1.22);}}
+@keyframes breatheRing{0%,100%{transform:scale(.82); opacity:.35;} 50%{transform:scale(1.18); opacity:.85;}}
+@keyframes breatheGlow{0%,100%{transform:scale(.8); opacity:.45;} 50%{transform:scale(1.25); opacity:.9;}}
+.pre-word{font-family:var(--serif); font-style:italic; font-weight:300; font-size:1.4rem; letter-spacing:6px; color:var(--text-soft); opacity:1; transition:opacity .5s ease; text-transform:lowercase;}
 
 /* ============ ORBES AMBIENTALES ============ */
 .orb{position:absolute; border-radius:50%; filter:blur(70px); pointer-events:none; z-index:0;}
@@ -234,7 +253,16 @@ footer{padding:60px 56px 40px; text-align:center;}
 </head>
 <body>
 
-<div id="preloader"><p class="pre-word">respirar</p></div>
+<div id="preloader">
+  <div class="breathe-wrap">
+    <div class="breathe-stage">
+      <div class="breathe-glow"></div>
+      <div class="breathe-ring"></div>
+      <div class="breathe-circle"></div>
+    </div>
+    <p class="pre-word" id="preWord">inhala</p>
+  </div>
+</div>
 
 <div class="rail">
   <div class="rail-track" id="railTrack"><div class="rail-pearl" id="railPearl"></div></div>
@@ -462,7 +490,15 @@ footer{padding:60px 56px 40px; text-align:center;}
 </a>
 
 <script>
-setTimeout(()=>document.getElementById('preloader').classList.add('hidden'), 1500);
+const preWord = document.getElementById('preWord');
+function swapWord(word){
+  if(!preWord) return;
+  preWord.style.opacity = 0;
+  setTimeout(()=>{ preWord.textContent = word; preWord.style.opacity = 1; }, 280);
+}
+setTimeout(()=> swapWord('exhala'), 1720);
+setTimeout(()=> swapWord('inhala'), 3720);
+setTimeout(()=>document.getElementById('preloader').classList.add('hidden'), 4300);
 
 const header = document.getElementById('siteHeader');
 window.addEventListener('scroll', ()=> header.classList.toggle('scrolled', window.scrollY>30));
