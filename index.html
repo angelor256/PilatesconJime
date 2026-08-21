@@ -81,11 +81,12 @@ header.scrolled{padding:18px 56px; background:rgba(251,246,243,.85); backdrop-fi
 nav{display:flex; gap:34px;}
 nav a{font-size:.78rem; letter-spacing:1.5px; text-transform:uppercase; font-weight:400; opacity:.7; transition:opacity .3s, color .3s;}
 nav a:hover{opacity:1; color:var(--rose);}
+.header-actions{display:flex; align-items:center; gap:12px;}
 .pill-btn{display:inline-block; background:var(--text); color:var(--bg); padding:12px 26px; border-radius:30px; font-size:.74rem; letter-spacing:1px; text-transform:uppercase; transition:transform .35s cubic-bezier(.34,1.56,.64,1), background .3s ease, box-shadow .3s ease;}
 .pill-btn:hover{background:var(--rose); transform:translateY(-2px); box-shadow:0 10px 22px rgba(201,141,143,.35);}
 .pill-btn.outline{background:transparent; color:var(--text); border:1px solid var(--text-faint);}
 .pill-btn.outline:hover{background:var(--panel-solid); border-color:var(--rose); color:var(--rose);}
-@media (max-width:900px){nav{display:none;} header{padding:20px 24px;}}
+@media (max-width:900px){nav{display:none;} header{padding:20px 24px;} .header-actions .pill-btn.outline{display:none;}}
 
 /* ============ HERO ============ */
 .hero{min-height:100vh; display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:50px; padding:150px 56px 90px 56px; position:relative;}
@@ -209,6 +210,22 @@ nav a:hover{opacity:1; color:var(--rose);}
 .chip span{font-size:.64rem; color:var(--text-soft); text-transform:uppercase; letter-spacing:.5px;}
 @media (max-width:900px){.instructor-grid{grid-template-columns:1fr; gap:44px;}}
 
+/* ============ APP ============ */
+.app-band{max-width:1240px; margin:0 auto; padding:0 56px 40px;}
+.app-card{background:var(--text); color:var(--bg); border-radius:32px; padding:56px; display:grid; grid-template-columns:1.1fr .9fr; gap:48px; align-items:center; overflow:hidden; position:relative;}
+.app-card h2{font-family:var(--serif); font-weight:300; font-size:clamp(1.9rem,3.3vw,2.8rem); line-height:1.15; margin-bottom:18px;}
+.app-card h2 em{font-style:italic; color:var(--blush); font-weight:500;}
+.app-card p{color:rgba(251,246,243,.72); line-height:1.8; max-width:420px; margin-bottom:28px;}
+.app-list{display:grid; gap:12px; margin-bottom:30px;}
+.app-list div{display:flex; align-items:baseline; gap:12px; font-size:.9rem; color:rgba(251,246,243,.85);}
+.app-list i{width:6px; height:6px; border-radius:50%; background:var(--blush); flex:none; display:block; transform:translateY(-2px);}
+.app-card .pill-btn{background:var(--bg); color:var(--text);}
+.app-card .pill-btn:hover{background:var(--blush); color:var(--text);}
+.app-phone{justify-self:center; width:100%; max-width:250px; aspect-ratio:9/19; border-radius:34px; border:1px solid rgba(251,246,243,.25); background:linear-gradient(180deg, rgba(243,217,211,.18), rgba(251,246,243,.06)); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-align:center; padding:26px;}
+.app-phone span{font-family:var(--serif); font-style:italic; font-size:1.5rem;}
+.app-phone small{font-size:.68rem; letter-spacing:1.5px; text-transform:uppercase; color:rgba(251,246,243,.6);}
+@media (max-width:900px){.app-band{padding:0 24px 20px;} .app-card{grid-template-columns:1fr; padding:38px 28px; gap:32px;} .app-phone{max-width:190px;}}
+
 /* ============ TESTIMONIOS ============ */
 .quote-belt{overflow:hidden; padding:20px 0; mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent); -webkit-mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);}
 .quote-track{display:inline-flex; gap:24px; animation:beltScroll 32s linear infinite;}
@@ -276,7 +293,10 @@ footer{padding:60px 56px 40px; text-align:center;}
     <a href="#horarios">Calendario</a>
     <a href="#instructora">Instructora</a>
   </nav>
-  <a href="https://wa.me/50686909330?text=Hola%20Jime,%20me%20gustar%C3%ADa%20agendar%20una%20clase%20de%20Pilates." target="_blank" class="pill-btn">Reservar</a>
+  <div class="header-actions">
+    <a href="app.html" class="pill-btn outline">Abrir la app</a>
+    <a href="https://wa.me/50686909330?text=Hola%20Jime,%20me%20gustar%C3%ADa%20agendar%20una%20clase%20de%20Pilates." target="_blank" class="pill-btn">Reservar</a>
+  </div>
 </header>
 
 <main>
@@ -290,7 +310,7 @@ footer{padding:60px 56px 40px; text-align:center;}
       <p class="hero-sub">Clases de pilates pensadas para tu cuerpo, tu ritmo y tu espacio. Sesiones íntimas a domicilio, atención cercana y resultados que se sienten desde la primera clase.</p>
       <div class="hero-actions">
         <a href="https://wa.me/50686909330?text=Hola%20Jime,%20quiero%20m%C3%A1s%20informaci%C3%B3n%20para%20una%20clase%20de%20prueba." target="_blank" class="pill-btn">Reservar clase de prueba</a>
-        <a href="#metodo" class="text-link">Conocer el método</a>
+        <a href="app.html" class="text-link">Abrir la app</a>
       </div>
     </div>
     <div class="hero-visual">
@@ -439,7 +459,27 @@ footer{padding:60px 56px 40px; text-align:center;}
     </div>
   </section>
 
-  <section class="section reveal" style="padding-top:0;">
+  <section class="app-band" id="app">
+    <div class="app-card reveal">
+      <div>
+        <p class="eyebrow" style="color:var(--blush);">La app</p>
+        <h2>Llevá tus clases <em>en el teléfono</em></h2>
+        <p>Reservá, revisá tus horarios y seguí tu progreso desde una sola pantalla, sin escribir un mensaje.</p>
+        <div class="app-list">
+          <div><i></i>Tu próxima clase y las tarifas siempre a mano</div>
+          <div><i></i>Reserva en tres pasos: formato, horario y confirmación</div>
+          <div><i></i>Progreso, racha y objetivos de cada mes</div>
+        </div>
+        <a href="app.html" class="pill-btn">Abrir la app</a>
+      </div>
+      <div class="app-phone">
+        <span>Pilates con Jime</span>
+        <small>App para alumnas</small>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" style="padding-top:40px;">
     <div class="quote-belt">
       <div class="quote-track" id="quoteTrack">
         <span class="quote-card"><p>"Cambié mi postura y mi relación con mi cuerpo en tres meses."</p><span class="who">Andrea R.</span></span>
@@ -477,6 +517,7 @@ footer{padding:60px 56px 40px; text-align:center;}
 <footer>
   <div class="foot-brand">Pilates con Jime</div>
   <div class="foot-links">
+    <a href="app.html">App</a>
     <a href="#">Instagram</a>
     <a href="https://wa.me/50686909330" target="_blank">WhatsApp</a>
     <a href="mailto:jimena092213@gmail.com">Email</a>
@@ -520,6 +561,7 @@ const railSections = [
   {id:'clases', label:'Clases'},
   {id:'horarios', label:'Calendario'},
   {id:'instructora', label:'Instructora'},
+  {id:'app', label:'App'},
   {id:'contact', label:'Contacto'}
 ];
 let railDots = [];
@@ -535,7 +577,7 @@ function buildRail(){
     dot.className='rail-dot';
     dot.style.top = (pct*100)+'%';
     dot.innerHTML = `<span class="rail-dot-label">${s.label}</span>`;
-    dot.addEventListener('click', ()=> el.scrollIntoView({behavior:'smooth'}));
+    dot.addEventListener('click', ()=> window.scrollTo({top:el.offsetTop-80, behavior:'smooth'}));
     railTrack.appendChild(dot);
     railDots.push({el:dot, pct});
   });
