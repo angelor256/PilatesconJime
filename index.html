@@ -287,6 +287,8 @@ footer{padding:60px 56px 40px; text-align:center;}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="pcj-supabase.js"></script>
 </head>
 <body>
 
@@ -415,6 +417,7 @@ footer{padding:60px 56px 40px; text-align:center;}
     <div class="section-head reveal">
       <p class="eyebrow">Disponibilidad</p>
       <h2 class="section-title">Reservá tu <em>próxima sesión</em></h2>
+      <p style="max-width:52ch;margin:14px auto 0;font-size:.92rem;line-height:1.7;color:var(--text-soft);">Jime abre todos los días. Elegí la hora que te sirva desde la app y ella confirma la reserva.</p>
     </div>
 
     <div class="cal-nav reveal">
@@ -621,12 +624,28 @@ document.querySelectorAll('.pill-tab, .gbar').forEach(el=>{
   el.addEventListener('click', ()=> selectFormat(el.dataset.format));
 });
 
-/* Calendario */
+/* Calendario · Jime está disponible siempre; una hora se cierra
+   cuando ya hay una reserva o cuando Jime la bloqueó desde el panel. */
 let currentDate = new Date();
-let scheduleData = JSON.parse(localStorage.getItem('pilates_schedule_v3')) || {
-  "2026-08-03": {total:4, booked:2, note:"7:00 AM / 8:30 AM"},
-  "2026-08-05": {total:4, booked:4, note:"Lleno total"}
-};
+let scheduleData = {};
+
+async function loadSchedule(){
+  if(!window.PCJ || !window.PCJ.enabled) return;
+  const from = new Date();
+  const to = new Date(from.getFullYear(), from.getMonth()+3, 0);
+  try{
+    const slots = await window.PCJ.getSlots(from, to);
+    const map = {};
+    slots.forEach(s=>{
+      const e = map[s.date] || (map[s.date] = {total:0, booked:0, hours:[]});
+      e.total++;
+      if(s.free>0) e.hours.push(s.time); else e.booked++;
+    });
+    Object.values(map).forEach(e=>{ e.note = e.hours.slice(0,2).join(' / '); });
+    scheduleData = map;
+    renderCalendar();
+  }catch(e){}
+}
 document.getElementById('prevMonth').addEventListener('click', ()=>{ currentDate.setMonth(currentDate.getMonth()-1); renderCalendar(); });
 document.getElementById('nextMonth').addEventListener('click', ()=>{ currentDate.setMonth(currentDate.getMonth()+1); renderCalendar(); });
 
@@ -647,12 +666,15 @@ function renderCalendar(){
     const cell = document.createElement('div'); cell.className='cal-cell';
     const key = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
     let html = `<div class="cal-num">${day}</div>`;
-    if(scheduleData[key]){
-      const info = scheduleData[key];
+    const past = new Date(year, month, day, 23, 59) < new Date();
+    const info = scheduleData[key];
+    if(past){
+      cell.classList.add('empty');
+    } else if(info){
       const avail = info.total - info.booked;
-      let cls='st-ok', txt=`${avail} disponibles`;
-      if(avail<=0){ cls='st-full'; txt='Lleno'; }
-      else if(avail<=2){ cls='st-low'; txt=`¡Solo ${avail}!`; }
+      let cls='st-ok', txt=`${avail} horas libres`;
+      if(avail<=0){ cls='st-full'; txt='Sin horas'; }
+      else if(avail===1){ cls='st-low'; txt='1 hora libre'; }
       html += `<div><span style="font-size:.6rem;color:var(--text-soft);">${info.note||''}</span><span class="cal-badge ${cls}">${txt}</span></div>`;
     } else {
       html += `<div><span class="cal-badge st-ok">Disponible</span></div>`;
@@ -662,6 +684,7 @@ function renderCalendar(){
   }
 }
 renderCalendar();
+loadSchedule();
 
 /* Loop de testimonios */
 const quoteTrack = document.getElementById('quoteTrack');
