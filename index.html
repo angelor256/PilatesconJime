@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Pilates con Jime — Espacio para moverte</title>
 <script>
+// Registra el service worker ANTES de la redirección de abajo: si se espera
+// al evento "load", la redirección a app.html (cuando la app está instalada)
+// ya navegó lejos de esta página y el registro nunca llega a dispararse.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+<script>
 /* Si la página se abre desde el icono de la pantalla de inicio, va directo a la app.
    ?web=1 fuerza la versión web. */
 (function(){
@@ -21,15 +29,6 @@
 <link rel="manifest" href="manifest.json">
    <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
-<script>
-// Registra el service worker para que la app instalada en el celular
-// siempre busque la versión más nueva en vez de quedarse con una vieja.
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  });
-}
-</script>
 <meta name="theme-color" content="#FDFAF6">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">

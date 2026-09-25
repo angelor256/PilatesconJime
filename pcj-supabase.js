@@ -11,6 +11,15 @@
   // Clave pública VAPID para las notificaciones push (la privada vive solo en Supabase).
   const VAPID_PUBLIC_KEY = 'BMQMiWG3s2xWzbPvaFIypDOxuWvY0ul8eFisv02U16oiWN8uMUjJRm4WaviMGwDdIeS_17095201LaEo_Sqe-g0';
 
+  // Registra el service worker acá también (no solo en index.html): si la
+  // alumna abre la app instalada directo en app.html (el caso normal en un
+  // celular con el ícono en la pantalla de inicio), index.html nunca llega a
+  // ejecutar su propio register() porque redirige antes. Sin esto, activar
+  // notificaciones se queda esperando un service worker que no existe.
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => { });
+  }
+
   const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
   function urlBase64ToUint8Array(base64String) {
@@ -249,7 +258,18 @@
       if (!this.pushSupported()) throw new Error('Este navegador no soporta notificaciones push.');
       const perm = await Notification.requestPermission();
       if (perm !== 'granted') throw new Error('Permiso de notificaciones no concedido.');
-      const reg = await navigator.serviceWorker.ready;
+      // register() es seguro llamarlo de nuevo si ya está registrado (devuelve el
+      // mismo registro) — lo hacemos acá por si el registro automático de arriba
+      // todavía no terminó. Con timeout: si nunca hay un service worker activo,
+      // que falle con un mensaje claro en vez de quedarse colgado en silencio.
+      await navigator.serviceWorker.register('sw.js').catch(() => { });
+      const reg = await Promise.race([
+        navigator.serviceWorker.ready,
+        new Promise((_, reject) => setTimeout(
+          () => reject(new Error('No se pudo activar el service worker en este celular. Probá cerrar la app del todo (deslizar para cerrarla) y volver a abrirla desde el ícono.')),
+          8000
+        ))
+      ]);
       let sub = await reg.pushManager.getSubscription();
       if (!sub) {
         sub = await reg.pushManager.subscribe({
