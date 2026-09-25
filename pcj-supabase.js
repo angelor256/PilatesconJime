@@ -8,7 +8,19 @@
     ? window.supabase.createClient(URL, KEY, { auth: { persistSession: true, autoRefreshToken: true } })
     : null;
 
+  // Clave pública VAPID para las notificaciones push (la privada vive solo en Supabase).
+  const VAPID_PUBLIC_KEY = 'BMQMiWG3s2xWzbPvaFIypDOxuWvY0ul8eFisv02U16oiWN8uMUjJRm4WaviMGwDdIeS_17095201LaEo_Sqe-g0';
+
   const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const raw = atob(base64);
+    const out = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i);
+    return out;
+  }
 
   const PCJ = {
     sb,
@@ -216,6 +228,51 @@
     },
     async dismissNotification(userId, id) {
       await sb.from('notification_reads').upsert({ user_id: userId, notification_id: id, dismissed: true });
+    },
+
+    /* ---------- notificaciones push (avisos en el celular) ---------- */
+    pushSupported() {
+      return !!(window.PushManager && navigator.serviceWorker && window.Notification);
+    },
+    pushPermission() {
+      return this.pushSupported() ? Notification.permission : 'unsupported';
+    },
+    async pushSubscribed() {
+      if (!this.pushSupported()) return false;
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (!reg) return false;
+      const sub = await reg.pushManager.getSubscription();
+      return !!sub;
+    },
+    /* Pide permiso (si hace falta) y guarda la suscripción de este celular en Supabase. */
+    async enablePush(userId) {
+      if (!this.pushSupported()) throw new Error('Este navegador no soporta notificaciones push.');
+      const perm = await Notification.requestPermission();
+      if (perm !== 'granted') throw new Error('Permiso de notificaciones no concedido.');
+      const reg = await navigator.serviceWorker.ready;
+      let sub = await reg.pushManager.getSubscription();
+      if (!sub) {
+        sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+        });
+      }
+      const json = sub.toJSON();
+      const { error } = await sb.from('push_subscriptions').upsert({
+        user_id: userId, endpoint: json.endpoint, p256dh: json.keys.p256dh, auth: json.keys.auth
+      }, { onConflict: 'endpoint' });
+      if (error) throw error;
+      return true;
+    },
+    /* Da de baja las notificaciones push en este celular. */
+    async disablePush() {
+      if (!this.pushSupported()) return;
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (!reg) return;
+      const sub = await reg.pushManager.getSubscription();
+      if (!sub) return;
+      await sb.from('push_subscriptions').delete().eq('endpoint', sub.endpoint);
+      await sub.unsubscribe();
     },
 
     async sendFeedback(userId, name, message) {
