@@ -181,24 +181,35 @@
       await sb.from('bookings').update({ status: 'completada' }).eq('id', booking.id);
     },
     async sendNotification(title, body, audience) {
-      const { error } = await sb.from('notifications').insert({ title, body, audience });
+      const { data, error } = await sb.from('notifications').insert({ title, body, audience }).select().single();
+      if (error) throw error;
+      return data;
+    },
+    async deleteNotification(id) {
+      const { error } = await sb.from('notifications').delete().eq('id', id);
       if (error) throw error;
     },
     /* ---------- avisos para la alumna ---------- */
     async inbox(userId) {
       const [n, r] = await Promise.all([
         sb.from('notifications').select('*').order('sent_at', { ascending: false }).limit(30),
-        sb.from('notification_reads').select('notification_id').eq('user_id', userId)
+        sb.from('notification_reads').select('notification_id, dismissed').eq('user_id', userId)
       ]);
       const read = new Set((r.data || []).map(x => x.notification_id));
-      return (n.data || []).map(x => ({
-        id: x.id, title: x.title, body: x.body,
-        sentAt: x.sent_at, unread: !read.has(x.id)
-      }));
+      const dismissed = new Set((r.data || []).filter(x => x.dismissed).map(x => x.notification_id));
+      return (n.data || [])
+        .filter(x => !dismissed.has(x.id))
+        .map(x => ({
+          id: x.id, title: x.title, body: x.body,
+          sentAt: x.sent_at, unread: !read.has(x.id)
+        }));
     },
     async markRead(userId, ids) {
       if (!ids.length) return;
       await sb.from('notification_reads').upsert(ids.map(id => ({ user_id: userId, notification_id: id })));
+    },
+    async dismissNotification(userId, id) {
+      await sb.from('notification_reads').upsert({ user_id: userId, notification_id: id, dismissed: true });
     },
 
     async sendFeedback(userId, name, message) {
