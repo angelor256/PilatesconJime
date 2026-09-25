@@ -185,6 +185,12 @@
       if (error) throw error;
       return data;
     },
+    /* Aviso dirigido a una sola alumna (por ejemplo al confirmar/cancelar su reserva). */
+    async sendUserNotification(userId, title, body, audience) {
+      const { data, error } = await sb.from('notifications').insert({ title, body, audience, user_id: userId }).select().single();
+      if (error) throw error;
+      return data;
+    },
     async deleteNotification(id) {
       const { error } = await sb.from('notifications').delete().eq('id', id);
       if (error) throw error;
@@ -192,7 +198,7 @@
     /* ---------- avisos para la alumna ---------- */
     async inbox(userId) {
       const [n, r] = await Promise.all([
-        sb.from('notifications').select('*').order('sent_at', { ascending: false }).limit(30),
+        sb.from('notifications').select('*').or(`user_id.is.null,user_id.eq.${userId}`).order('sent_at', { ascending: false }).limit(30),
         sb.from('notification_reads').select('notification_id, dismissed').eq('user_id', userId)
       ]);
       const read = new Set((r.data || []).map(x => x.notification_id));
